@@ -30,7 +30,7 @@ frame=Frame(window,width=350,height=350,bg='white')
 frame.place(x=500,y=65)
 
 heading=Label(frame,text='Sign in',fg='#34e4e1',bg='white',font=('Microsoft Yahei UI',23,'bold'))
-heading.place(x=120,y=30)
+heading.place(x=120,y=20)
 
 def on_enter(e):
     user.delete(0,'end')
@@ -65,11 +65,11 @@ Frame(frame,width=295,height=2,bg='black').place(x=25,y=187)
 
 
 Button(frame,width=39,pady=7,text='Sign in',bg='#34e4e1',fg='white',border=0).place(x=35,y=204)
-label=Label(frame,text="Don't have an account?",fg='black',bg='white',font=('Microsoft Yahei UI',9))
-label.place(x=75,y=270)
+label=Label(frame,text="Don't have an account?",fg='black',bg='white',font=('Microsoft Yahei UI',10))
+label.place(x=75,y=295)
 
 sign_up=Button(frame,width=6,text='Sign Up',border=0,bg='white',cursor='hand2',fg='#34e4e1',command=signin)
-sign_up.place(x=215,y=270)
+sign_up.place(x=225,y=298)
 
 def on_enter(e):
    conf.delete(0,'end')
@@ -87,6 +87,8 @@ conf.insert(0,'Confirm Password')
 conf.bind('<FocusIn>', on_enter)
 conf.bind('<FocusOut>', on_leave)
 
+termsandcondtitions=Checkbutton(frame,bg='white',text='I agree to the Terms and Conditions', font= ( 'Microsoft Yahei UI',9),)
+termsandcondtitions.place(x=50,y=240)
 
 
 
