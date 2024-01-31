@@ -56,12 +56,13 @@ def on_leave(e):
         code.insert(0,'Password')
 
 code = Entry(frame,width=30,fg='black',border=2,bg="white",font=('Microsoft Yahei UI',11))
-code.place(x=30,y=150)
+code.place(x=30,y=120)
 code.insert(0,'Password')
 code.bind('<FocusIn>', on_enter)
 code.bind('<FocusOut>', on_leave)
 
-Frame(frame,width=295,height=2,bg='black').place(x=25,y=177)
+Frame(frame,width=295,height=2,bg='black').place(x=25,y=187)
+
 
 Button(frame,width=39,pady=7,text='Sign in',bg='#34e4e1',fg='white',border=0).place(x=35,y=204)
 label=Label(frame,text="Don't have an account?",fg='black',bg='white',font=('Microsoft Yahei UI',9))
@@ -70,6 +71,21 @@ label.place(x=75,y=270)
 sign_up=Button(frame,width=6,text='Sign Up',border=0,bg='white',cursor='hand2',fg='#34e4e1',command=signin)
 sign_up.place(x=215,y=270)
 
+def on_enter(e):
+   conf.delete(0,'end')
+
+def on_leave(e):
+    name=user.get()
+    if name=='':
+        conf.insert(0,'Confirm Password')
+
+Frame(frame,width=295,height=2,bg='black').place(x=25,y=147)
+
+conf = Entry(frame,width=30,fg='black',border=2,bg="white",font=('Microsoft Yahei UI',11))
+conf.place(x=30,y=160)
+conf.insert(0,'Confirm Password')
+conf.bind('<FocusIn>', on_enter)
+conf.bind('<FocusOut>', on_leave)
 
 
 
