@@ -74,9 +74,11 @@ sign_up.place(x=215,y=200)
 
 Frame(frame,width=295,height=2,bg='black').place(x=25,y=187)
 
+label=Label(frame,text="Don't have an account?",fg='black',bg='white',font=('Microsoft Yahei UI',10))
+label.place(x=75,y=295)
 
-
-
+sign_up=Button(frame,width=6,text='Sign Up',border=0,bg='white',cursor='hand2',fg='#85f2f0',command=signin)
+sign_up.place(x=225,y=298)
 
 
 
