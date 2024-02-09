@@ -1,0 +1,1 @@
+ctiveforeground='#6baeb0'
