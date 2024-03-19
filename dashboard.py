@@ -6,9 +6,17 @@ from PIL import Image
 
 window=Tk()
 window.title("Dashboard")
-window.geometry('925x500+300+150')
+window.geometry('925x500+185+85')
 window.configure(bg='#fff')
 window.resizable(False,False)
+
+def add_open():
+    window.destroy()
+    import add
+
+def pro_open():
+    window.destroy()
+    import profile
 
 bgOriginal = Image.open('newbg.png').resize((925,500))
         # bgImage = ImageTk.PhotoImage(bgOriginal)
@@ -19,11 +27,16 @@ Label(window,image=img,border=0,bg='white').place(x=0,y=0)
 
 bgOriginal1 = Image.open('profile.png').resize((275,155))
 img1 =ImageTk.PhotoImage(bgOriginal1)
-Button(window,image=img1,border=10,bg='teal',activebackground='#356466').place(x=15,y=55) 
+profile=Button(window,image=img1,border=10,bg='teal',activebackground='#356466',command= pro_open).place(x=15,y=55) 
+
 
 bgOriginal2 = Image.open('add1.png').resize((275,155))
 img2 =ImageTk.PhotoImage(bgOriginal2)
-Button(window,image=img2,border=10,bg='teal',activebackground='#356466').place(x=320,y=55)
+add=Button(window,image=img2,border=10,bg='teal',activebackground='#356466',command=add_open).place(x=320,y=55)
+
+
+
+
 
 bgOriginal3 = Image.open('stocks.png').resize((275,155))
 img3 =ImageTk.PhotoImage(bgOriginal3)
