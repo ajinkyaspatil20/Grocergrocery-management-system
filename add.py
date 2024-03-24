@@ -20,7 +20,15 @@ bgOriginal = Image.open('fruits.png').resize((925,500))
 img =ImageTk.PhotoImage(bgOriginal)
 Label(window,image=img,border=0,bg='white').place(x=0,y=0)
 
-
+def clearentryfields():
+    name.delete(0,END)
+    w_name.delete(0,END)
+    w_contact.delete(0,END)
+    cp.delete(0,END)
+    sp.delete(0,END)
+    quan.delete(0,END)
+    exd.delete(0,END)
+    
 def set_transparent(widget):
     widget.attributes('-alpha',0.0)
 
@@ -116,6 +124,9 @@ def update_details():
     con.commit()
     fetch_data()
     con.close()
+    messagebox.showinfo('Sucsess',' Item UPDATED Successfully')
+    clearentryfields()
+    window.focus()
 
 def get_cursor(event=''):
     update=Button(window,width=20,pady=7,text='UPDATE',bg='#013f45',activebackground='#006666',activeforeground='white',fg='white',border=1,command=update_details).place(x=370,y=460)
@@ -132,16 +143,8 @@ def get_cursor(event=''):
     cursor_row=product_table.focus()
     content=product_table.item(cursor_row)
     rowss=content["values"]
-    name.delete(0,END)
-    w_name.delete(0,END)
-    w_contact.delete(0,END)
-    cp.delete(0,END)
-    sp.delete(0,END)
-    quan.delete(0,END)
-    exd.delete(0,END)
-    
-    
-    
+    clearentryfields()
+
     name.insert(0,rowss[0])
     w_name.insert(0,rowss[1])
     w_contact.insert(0,rowss[2])
@@ -169,13 +172,17 @@ def add_details():
     if row != None:
         messagebox.showerror('Error','Product Already Exist')
     else:
+        if name.get()=="" or w_name.get()=="" or w_contact==""or cp.get()==""or sp.get()==""or quan.get()=="" or exd.get()=="":
+            messagebox.showerror('ERROR','PLEASE FILL ALL THE FIELD')
+            return
         cp_value = float(cp.get())  
         quan_value = int(quan.get())  
         ctotal = cp_value * quan_value
         sp_value = float(sp.get())  
         quan_value = int(quan.get())  
         stotal = sp_value * quan_value
-
+        
+  
         
         query='insert into finaldbt(name ,w_name,w_contact,c_price,s_price,quantity,ex_date,c_total,s_total) values(%s,%s,%s,%s,%s,%s,%s,%s,%s)'
         mycursor.execute(query,(name.get(),w_name.get(),w_contact.get(),cp.get(),sp.get(),quan.get(),exd.get(),ctotal,stotal ))
@@ -183,6 +190,8 @@ def add_details():
         fetch_data()
         con.close()
         messagebox.showinfo('Sucsess',' Item Added Successfully')
+        clearentryfields()
+        window.focus()
 
 def delete_details():
     con=pymysql.connect(host='localhost',user='root',password='travelmanagement')
@@ -204,20 +213,21 @@ def delete_details():
     fetch_data()
     
     con.close()
+    messagebox.showinfo('Sucsess',' Item DELETED Successfully')
+    clearentryfields()
+    window.focus()
 
-def on_vertical_scroll(*args):
-    window.yview(*args)
 
-def on_horizontal_scroll(*args):
-    window.xview(*args)
 
-scroll_x=ttk.Scrollbar(frame,orient=HORIZONTAL, command=on_vertical_scroll)
-scroll_y=ttk.Scrollbar(frame,orient=VERTICAL ,command=on_horizontal_scroll)
+product_table=ttk.Treeview(frame,columns=("ProductName","wholesellername","wholesellercontact","costprice","sellingprice","quantity","costpricetotal","sellingpricetotal","discount","exdate"))
 
-product_table=ttk.Treeview(frame,columns=("ProductName","wholesellername","wholesellercontact","costprice","sellingprice","quantity","costpricetotal","sellingpricetotal","discount","exdate"),xscrollcommand=scroll_x.set,yscrollcommand=scroll_y.set)
+vsbb = ttk.Scrollbar(frame, orient="vertical", command=product_table.yview)
+vsbb.pack(side="right", fill="y")
+product_table.configure(yscrollcommand=vsbb.set)
 
-scroll_x.pack(side=BOTTOM,fill=X)
-scroll_y.pack(side=RIGHT,fill=Y)
+hsbb = ttk.Scrollbar(frame, orient="horizontal", command=product_table.xview)
+hsbb.pack(side="bottom", fill="x")
+product_table.configure(xscrollcommand=hsbb.set)
 
 scroll_x=ttk.Scrollbar(command=product_table.xview)
 scroll_y=ttk.Scrollbar(command=product_table.yview)
