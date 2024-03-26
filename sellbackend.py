@@ -7,10 +7,14 @@ import pymysql
 from tkcalendar import Calendar
 import tkinter as tk
 from docxtpl import DocxTemplate
+import customtkinter as ctk
+
 
 mwindow=Tk()
 mwindow.title=('Grocery Management System')
 mwindow.geometry('1440x750+50+20')
+
+
 
 def merge_billing_data():
     merged_data = {}
@@ -43,13 +47,10 @@ def merge_billing_data():
             data['total']
         ))
 
-def on_vertical_scroll(*args):
-    outputframe.yview(*args)
-def on_horizontal_scroll(*args):
-    outputframe.xview(*args)
+
 
 def sell_detail():   
-    con=pymysql.connect(host='localhost',user='root',password='root')
+    con=pymysql.connect(host='localhost',user='root',password='Shar@2004')
     mycursor= con.cursor()
     query='use crud'
     mycursor.execute(query)
@@ -163,7 +164,7 @@ def clear_entryfield():
         
 def add_details():
     try:
-        con=pymysql.connect(host='localhost',user='root',password='root')
+        con=pymysql.connect(host='localhost',user='root',password='Shar@2004')
         mycursor= con.cursor()
     except:
         messagebox.showerror("Error",'Connection Failed With Database')
@@ -215,7 +216,7 @@ def add_details():
     clear_entryfield()
 
 def search():
-    con=pymysql.connect(host='localhost',user='root',password='root')
+    con=pymysql.connect(host='localhost',user='root',password='Shar@2004')
     mycursor= con.cursor()
     query='use crud'
     mycursor.execute(query)
@@ -252,7 +253,7 @@ def search():
 
 def fetch_data():
 
-    con=pymysql.connect(host='localhost',user='root',password='root')
+    con=pymysql.connect(host='localhost',user='root',password='Shar@2004')
     mycursor= con.cursor()
     query='use crud'
     mycursor.execute(query)
@@ -269,7 +270,7 @@ def fetch_data():
     
 def get_cursor(event=''):
 
-    con=pymysql.connect(host='localhost',user='root',password='root')
+    con=pymysql.connect(host='localhost',user='root',password='Shar@2004')
     mycursor= con.cursor()
     query='use crud'
     mycursor.execute(query)
@@ -290,7 +291,7 @@ def get_cursor(event=''):
 
 def get_cursor2(event=''):
 
-    con=pymysql.connect(host='localhost',user='root',password='root')
+    con=pymysql.connect(host='localhost',user='root',password='Shar@2004')
     mycursor= con.cursor()
     query='use crud'
     mycursor.execute(query)
@@ -376,18 +377,18 @@ c_contactl.grid(row=1,column=0,padx=20)
 c_contacte = Entry(outputframe3,width=15,fg='black',border=2,bg="white",font=('Microsoft Yahei UI',10))
 c_contacte.grid(row=1,column=1)
 
-scroll_x=ttk.Scrollbar(outputframe,orient=HORIZONTAL, command=on_vertical_scroll)
-scroll_y=ttk.Scrollbar(outputframe,orient=VERTICAL ,command=on_horizontal_scroll)
-scroll_x2=ttk.Scrollbar(outputframe2,orient=HORIZONTAL, command=on_vertical_scroll)
-scroll_y2=ttk.Scrollbar(outputframe2,orient=VERTICAL ,command=on_horizontal_scroll)
-scroll_x2.pack(side=BOTTOM,fill=X)
-scroll_y2.pack(side=RIGHT,fill=Y)
-product_table=ttk.Treeview(outputframe,columns=("name_of_product","sellingprice","quantity","sellingpricetotal","discount","exdate"),xscrollcommand=scroll_x.set,yscrollcommand=scroll_y.set)
 
-scroll_x.pack(side=BOTTOM,fill=X)
-scroll_y.pack(side=RIGHT,fill=Y)
-scroll_x=ttk.Scrollbar(command=product_table.xview)
-scroll_y=ttk.Scrollbar(command=product_table.yview)
+
+product_table=ttk.Treeview(outputframe,columns=("name_of_product","sellingprice","quantity","sellingpricetotal","discount","exdate"))
+
+vsbp = ttk.Scrollbar(outputframe, orient="vertical", command=product_table.yview)
+vsbp.pack(side="right", fill="y")
+product_table.configure(yscrollcommand=vsbp.set)
+hsbp = ttk.Scrollbar(outputframe, orient="horizontal", command=product_table.xview)
+hsbp.pack(side="bottom", fill="x")
+product_table.configure(xscrollcommand=hsbp.set)
+
+
 
 product_table.heading("name_of_product",text="PRODUCT")
 product_table.heading("sellingprice",text="SELLING PRICE")
@@ -407,6 +408,12 @@ product_table.pack(fill=BOTH,expand=1)
 
 product_table.bind("<ButtonRelease-1>",get_cursor)
 fetch_data()
+
+class RoundedButton(tk.Button):
+    def __init__(self, master=None, **kw):
+        super().__init__(master=master, **kw)
+        self.config(relief=tk.FLAT, borderwidth=0, bg='#006666', activebackground='#005555', fg='white', activeforeground='white', padx=12, pady=7, font=('Microsoft Yahei UI', 10))
+
 
 lb=Label(outputframe1,text='Name of product:',bd=0)
 lb.grid(row=0,column=0,padx=20)
@@ -436,8 +443,8 @@ exd.grid(row=2,column=1)
 add=Button(outputframe1,width=20,padx=12,pady=0,text='ADD',bg='#006666',activebackground='#006666',activeforeground='white',fg='white',command=add_details)
 add.place(x=300,y=52)
 
-update=Button(mwindow,width=15,pady=7,text='UPDATE',bg='#006666',activebackground='#006666',activeforeground='white',fg='white',command=update_details)
-update.place(x=50,y=610)
+update = RoundedButton(mwindow, text='UPDATE', command=update_details)
+update.place(x=50, y=610)
 updatequantity=Entry(mwindow,width=15,fg='black',border=2,bg="white",font=('Microsoft Yahei UI',10))
 updatequantity.place(x=180,y=620)
 
@@ -447,15 +454,15 @@ delete.place(x=325,y=610)
 print=Button(mwindow,width=15,pady=7,text='print',bg='#006666',activebackground='#006666',activeforeground='white',fg='white',command=generate_invoice)
 print.place(x=1237,y=630)
 
-billing_table=ttk.Treeview(outputframe2,columns=("name_of_product","sellingprice","quantity","discount","exdate","total"),xscrollcommand=scroll_x.set,yscrollcommand=scroll_y.set)
+billing_table=ttk.Treeview(outputframe2,columns=("name_of_product","sellingprice","quantity","discount","exdate","total"))
 
-scroll_x.pack(side=BOTTOM,fill=X)
-scroll_y.pack(side=RIGHT,fill=Y)
-scroll_x=ttk.Scrollbar(command=billing_table.xview)
-scroll_y=ttk.Scrollbar(command=billing_table.yview)
 
-scroll_x2.pack(side=BOTTOM,fill=X)
-scroll_y2.pack(side=RIGHT,fill=Y)
+vsbb = ttk.Scrollbar(outputframe, orient="vertical", command=billing_table.yview)
+vsbb.pack(side="right", fill="y")
+billing_table.configure(yscrollcommand=vsbb.set)
+hsbb = ttk.Scrollbar(outputframe, orient="horizontal", command=billing_table.xview)
+hsbb.pack(side="bottom", fill="x")
+billing_table.configure(xscrollcommand=hsbb.set)
 scroll_x2=ttk.Scrollbar(command=billing_table.xview)
 scroll_y2=ttk.Scrollbar(command=billing_table.yview)
 
