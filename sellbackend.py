@@ -10,8 +10,18 @@ from docxtpl import DocxTemplate
 
 
 mwindow=Tk()
-mwindow.title=('Grocery Management System')
+mwindow.title=('Billing')
 mwindow.geometry('1440x750+50+20')
+# bgOriginal = Image.open('new1.png').resize((1440,750))
+#         # bgImage = ImageTk.PhotoImage(bgOriginal)
+#         # bgLabel=Label(fwindow,image=bgImage)
+#         # bgLabel.place(x=0,y=0)
+# img =ImageTk.PhotoImage(bgOriginal)
+
+bgOriginal = Image.open('newbg.png').resize((1500,750))
+img =ImageTk.PhotoImage(bgOriginal)
+Label(mwindow,image=img,border=0,bg='white').place(x=0,y=0)
+
 
 def merge_billing_data():
     merged_data = {}
@@ -50,7 +60,7 @@ def on_horizontal_scroll(*args):
     outputframe.xview(*args)
 
 def sell_detail():   
-    con=pymysql.connect(host='localhost',user='root',password='root')
+    con=pymysql.connect(host='localhost',user='root',password='travelmanagement')
     mycursor= con.cursor()
     query='use crud'
     mycursor.execute(query)
@@ -58,11 +68,15 @@ def sell_detail():
     if not billing_table.get_children():
         messagebox.showerror("ERROR",'Billing Table Empty')
         return
+    if c_contacte.get()=='' or c_namee.get()=="":
+        messagebox.showerror("Error",'Please Enter The Name and Contact of the Customer')
+        return
     try:
         query="INSERT INTO graph (date,profit,loss,nos) VALUES (CURDATE(),0.0,0.0,0)"
         mycursor.execute(query)
     except:
-        messagebox.showinfo("INFO",'HELLO THERE')
+        messagebox.showinfo("INFO",'Press OK to Confirm')
+    
     for row in billing_table.get_children():
         # Extract data from the treeview
         name_of_product = billing_table.item(row)['values'][0]
@@ -118,7 +132,7 @@ def sell_detail():
         billing_table.delete(item)
     
 def delete_details():
-    con=pymysql.connect(host='localhost',user='root',password='root')
+    con=pymysql.connect(host='localhost',user='root',password='travelmanagement')
     mycursor= con.cursor()
     query='use crud'
     mycursor.execute(query)
@@ -127,6 +141,8 @@ def delete_details():
     # Delete the selected item
     if selected_item:
         billing_table.delete(selected_item)
+    messagebox.showinfo('Sucsess',' Item DELETED Successfully')
+
     
 def generate_invoice():
     if c_contacte.get()=='' or c_namee.get()=="":
@@ -164,13 +180,16 @@ def clear_entryfield():
         
 def add_details():
     try:
-        con=pymysql.connect(host='localhost',user='root',password='root')
+        con=pymysql.connect(host='localhost',user='root',password='travelmanagement')
         mycursor= con.cursor()
     except:
         messagebox.showerror("Error",'Connection Failed With Database')
         return
     query='use crud'
     mycursor.execute(query)
+    if name.get()=="" or stotal.get()=="" or sp.get()==""or quan.get()=="" or exd.get()=="":
+            messagebox.showerror('ERROR','PLEASE FILL ALL THE FIELD')
+            return
     if quan.get()=='':
         messagebox.showerror("Error",'Please Enter The Quantity')
         return
@@ -213,17 +232,19 @@ def add_details():
     clear_entryfield()
    # billing_table.insert("", "end", values=(namev,sellingp,quantityv,discountv,date,total))
     product_table.selection_remove(product_table.selection())
+    messagebox.showinfo('Sucsess',' Item ADDED Successfully')
+    
     clear_entryfield()
 
 def search():
-    con=pymysql.connect(host='localhost',user='root',password='root')
+    con=pymysql.connect(host='localhost',user='root',password='travelmanagement')
     mycursor= con.cursor()
     query='use crud'
     mycursor.execute(query)
     search_term = searche.get()
     if search_term:
         # Clear the current content of the treeview
-        query="select * from finaldbt"
+        query="select name,s_price,quantity,s_total,discount,ex_date from finaldbt"             #
         mycursor.execute(query)
         row=mycursor.fetchall()
         if len(row)!=0:
@@ -231,17 +252,30 @@ def search():
         # for row in product_table.get_children():
         #     product_table.delete(row)
         # Execute SQL query to fetch names matching the search term
-        mycursor.execute("SELECT * FROM finaldbt WHERE name LIKE %s", (f'%{search_term}%',))
+        mycursor.execute("SELECT name,s_price,quantity,s_total,discount,ex_date FROM finaldbt WHERE name LIKE %s", (f'%{search_term}%',))#
         row=mycursor.fetchall()
+        
         if len(row)!=0:
             product_table.delete(*product_table.get_children())
             for i in row:
                 product_table.insert("",END,values=i)
             con.commit()
-        con.close() 
+        else:
+            messagebox.showerror("INVALID SEARCH","NO ITEM IN INVENTORY")
+            searche.delete(0,END)
+            query="select name,s_price,quantity,s_total,discount,ex_date from finaldbt"
+            mycursor.execute(query)
+            row=mycursor.fetchall()
+            if len(row)!=0:
+                product_table.delete(*product_table.get_children())
+                for i in row:
+                    product_table.insert("",END,values=i)
+                con.commit()
+            con.close() 
+        
     else:
         
-        query="select * from finaldbt"
+        query="select name,s_price,quantity,s_total,discount,ex_date from finaldbt"#
         mycursor.execute(query)
         row=mycursor.fetchall()
         if len(row)!=0:
@@ -253,7 +287,7 @@ def search():
 
 def fetch_data():
 
-    con=pymysql.connect(host='localhost',user='root',password='root')
+    con=pymysql.connect(host='localhost',user='root',password='travelmanagement')
     mycursor= con.cursor()
     query='use crud'
     mycursor.execute(query)
@@ -270,7 +304,7 @@ def fetch_data():
     
 def get_cursor(event=''):
 
-    con=pymysql.connect(host='localhost',user='root',password='root')
+    con=pymysql.connect(host='localhost',user='root',password='travelmanagement')
     mycursor= con.cursor()
     query='use crud'
     mycursor.execute(query)
@@ -291,7 +325,7 @@ def get_cursor(event=''):
 
 def get_cursor2(event=''):
 
-    con=pymysql.connect(host='localhost',user='root',password='root')
+    con=pymysql.connect(host='localhost',user='root',password='travelmanagement')
     mycursor= con.cursor()
     query='use crud'
     mycursor.execute(query)
@@ -310,7 +344,7 @@ def get_cursor2(event=''):
     exd.insert(0,rowss[4])  
    
 def update_details():
-    con=pymysql.connect(host='localhost',user='root',password='root')
+    con=pymysql.connect(host='localhost',user='root',password='travelmanagement')
     mycursor= con.cursor()
     query='use crud'
     mycursor.execute(query)
@@ -344,9 +378,24 @@ def update_details():
     if selected_item:
         billing_table.item(selected_item, values=(namev, sp.get(), updatequantity.get(),discountv,date,total))
     billing_table.selection_remove(billing_table.selection())
-    
+    messagebox.showinfo('Sucsess',' Item UPDATED Successfully')
     clear_entryfield() 
-      
+    
+def deselect(event=None):                   ##addkr
+    selected_item = product_table.selection()
+    if selected_item:
+        product_table.selection_remove(selected_item)
+        
+
+def on_click_outside(event):
+    # Check if the click occurred outside of the treeview
+    if event.widget != product_table:
+        deselect()
+        
+mwindow.bind("<Button-1>", on_click_outside)
+
+
+    
 head=Label(mwindow,text="BILLING SECTION")
 head.place(x=720,y=0)
 head1=Label(mwindow,text="SELECT PRODUCTS TO BE SOLD")
@@ -377,18 +426,14 @@ c_contactl.grid(row=1,column=0,padx=20)
 c_contacte = Entry(outputframe3,width=15,fg='black',border=2,bg="white",font=('Microsoft Yahei UI',10))
 c_contacte.grid(row=1,column=1)
 
-scroll_x=ttk.Scrollbar(outputframe,orient=HORIZONTAL, command=on_vertical_scroll)
-scroll_y=ttk.Scrollbar(outputframe,orient=VERTICAL ,command=on_horizontal_scroll)
-scroll_x2=ttk.Scrollbar(outputframe2,orient=HORIZONTAL, command=on_vertical_scroll)
-scroll_y2=ttk.Scrollbar(outputframe2,orient=VERTICAL ,command=on_horizontal_scroll)
-scroll_x2.pack(side=BOTTOM,fill=X)
-scroll_y2.pack(side=RIGHT,fill=Y)
-product_table=ttk.Treeview(outputframe,columns=("name_of_product","sellingprice","quantity","sellingpricetotal","discount","exdate"),xscrollcommand=scroll_x.set,yscrollcommand=scroll_y.set)
+product_table=ttk.Treeview(outputframe,columns=("name_of_product","sellingprice","quantity","sellingpricetotal","discount","exdate"))
+vsbp = ttk.Scrollbar(outputframe, orient="vertical", command=product_table.yview)
+vsbp.pack(side="right", fill="y")
+product_table.configure(yscrollcommand=vsbp.set)
 
-scroll_x.pack(side=BOTTOM,fill=X)
-scroll_y.pack(side=RIGHT,fill=Y)
-scroll_x=ttk.Scrollbar(command=product_table.xview)
-scroll_y=ttk.Scrollbar(command=product_table.yview)
+hsbp = ttk.Scrollbar(outputframe, orient="horizontal", command=product_table.xview)
+hsbp.pack(side="bottom", fill="x")
+product_table.configure(xscrollcommand=hsbp.set)
 
 product_table.heading("name_of_product",text="PRODUCT")
 product_table.heading("sellingprice",text="SELLING PRICE")
@@ -434,8 +479,10 @@ lb6.grid(row=2,column=0)
 exd = Entry(outputframe1,width=15,fg='black',border=2,bg="white",font=('Microsoft Yahei UI',10))
 exd.grid(row=2,column=1)
 
-add=Button(outputframe1,width=20,padx=12,pady=0,text='ADD',bg='#006666',activebackground='#006666',activeforeground='white',fg='white',command=add_details)
+add=Button(outputframe1,width=10,padx=12,pady=0,text='ADD',bg='#006666',activebackground='#006666',activeforeground='white',fg='white',command=add_details)
 add.place(x=300,y=52)
+clear=Button(outputframe1,width=10,padx=12,pady=0,text='CLEAR',bg='#006666',activebackground='#006666',activeforeground='white',fg='white',command=clear_entryfield)
+clear.place(x=420,y=52)
 
 update=Button(mwindow,width=15,pady=7,text='UPDATE',bg='#006666',activebackground='#006666',activeforeground='white',fg='white',command=update_details)
 update.place(x=50,y=610)
@@ -443,22 +490,20 @@ updatequantity=Entry(mwindow,width=15,fg='black',border=2,bg="white",font=('Micr
 updatequantity.place(x=180,y=620)
 
 delete=Button(mwindow,width=15,pady=7,text='delete',bg='#006666',activebackground='#006666',activeforeground='white',fg='white',command=delete_details)
-delete.place(x=325,y=610)
+delete.place(x=425,y=610)
 
 print=Button(mwindow,width=15,pady=7,text='print',bg='#006666',activebackground='#006666',activeforeground='white',fg='white',command=generate_invoice)
 print.place(x=1237,y=630)
 
-billing_table=ttk.Treeview(outputframe2,columns=("name_of_product","sellingprice","quantity","discount","exdate","total"),xscrollcommand=scroll_x.set,yscrollcommand=scroll_y.set)
+billing_table=ttk.Treeview(outputframe2,columns=("name_of_product","sellingprice","quantity","discount","exdate","total"))
 
-scroll_x.pack(side=BOTTOM,fill=X)
-scroll_y.pack(side=RIGHT,fill=Y)
-scroll_x=ttk.Scrollbar(command=billing_table.xview)
-scroll_y=ttk.Scrollbar(command=billing_table.yview)
+vsbb = ttk.Scrollbar(outputframe2, orient="vertical", command=billing_table.yview)
+vsbb.pack(side="right", fill="y")
+billing_table.configure(yscrollcommand=vsbb.set)
 
-scroll_x2.pack(side=BOTTOM,fill=X)
-scroll_y2.pack(side=RIGHT,fill=Y)
-scroll_x2=ttk.Scrollbar(command=billing_table.xview)
-scroll_y2=ttk.Scrollbar(command=billing_table.yview)
+hsbb = ttk.Scrollbar(outputframe2, orient="horizontal", command=billing_table.xview)
+hsbb.pack(side="bottom", fill="x")
+billing_table.configure(xscrollcommand=hsbb.set)
 
 billing_table.heading("name_of_product",text="PRODUCT")
 billing_table.heading("sellingprice",text="SELLING PRICE")
