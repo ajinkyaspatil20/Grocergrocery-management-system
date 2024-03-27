@@ -23,14 +23,29 @@ def check_password_strength(password):
         return False
 
 
-def toggle_password_visibility():
+def toggle_password_visibilityp():
     if show_password_var.get():
-        code.config(show="*")
-        conf.config(show="*")
-    else:
         code.config(show="")
-        conf.config(show="")
-
+        # conf.config(show="")
+    else:
+        code.config(show="*")
+        # conf.config(show="*")
+        
+def toggle_password_visibilitycp():
+    if show_password_var.get():
+        # code.config(show="")
+         conf.config(show="")
+    else:
+        # code.config(show="*")
+         conf.config(show="*")
+         
+def toggle_password_visibilityb():
+    if show_password_var.get():
+         code.config(show="")
+         conf.config(show="")
+    else:
+         code.config(show="*")
+         conf.config(show="*")
 
 Vwindow = Tk()
 Vwindow.title("SignUp")
@@ -70,7 +85,7 @@ def login_page():
 
     else:
         try:
-            con = pymysql.connect(host='localhost', user='root', password='root')
+            con = pymysql.connect(host='localhost', user='root', password='travelmanagement')
             mycursor = con.cursor()
         except:
             messagebox.showerror('Error', 'Database Connectivity Issue,Please Try Again')
@@ -122,11 +137,13 @@ def user_enter(e):
 def code_enter(e):
     if code.get() == 'Password':
         code.delete(0, END)
+        toggle_password_visibilityp()
 
 
 def conf_enter(e):
     if conf.get() == 'Confirm Password':
         conf.delete(0, END)
+        toggle_password_visibilitycp()
 
 
 def user_leave(e):
@@ -147,7 +164,13 @@ def code_leave(e):
     name = code.get()
     if name == '':
         code.insert(0, 'Password')
+        if show_password_var.get():
+         code.config(show="*")
+        
+        else:
+         code.config(show="")
 
+        
 
 code = Entry(frame, width=30, fg='black', border=2, bg="white", font=('Microsoft Yahei UI', 10), bd=0)
 code.place(x=30, y=120)
@@ -168,6 +191,12 @@ def conf_leave(e):
     name = conf.get()
     if name == '':
         conf.insert(0, 'Confirm Password')
+        if show_password_var.get():
+        # code.config(show="")
+         conf.config(show="*")
+        else:
+        # code.config(show="*")
+         conf.config(show="")
 
 
 conf = Entry(frame, width=30, fg='black', border=2, bg="white", font=('Microsoft Yahei UI', 10), bd=0)
@@ -181,8 +210,8 @@ termsandcondtitions = Checkbutton(frame, bg='white', text='I Agree to the Terms 
                                   activeforeground='#006666')
 termsandcondtitions.place(x=50, y=260)
 
-show_password_checkbox = Checkbutton(frame, text="Hide Password", variable=show_password_var,
-                                      command=toggle_password_visibility, bg='white', fg='#006666',
+show_password_checkbox = Checkbutton(frame, text="Show Password", variable=show_password_var,
+                                      command=toggle_password_visibilityb, bg='white', fg='#006666',
                                       activeforeground='#006666')
 show_password_checkbox.place(x=220, y=190)
 

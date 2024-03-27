@@ -5,11 +5,13 @@ import pymysql
 
 #baba honaaaaaaaaaaaaaaaaaaaaaaaaaaaaaanamoooooooooooooooooooooooooooooo
 
-def toggle_password_visibility():
-    if code.cget('show') == '':
-        code.config(show='*')
+def toggle_password_visibilityp():
+    if code.get():
+        code.config(show="")
+        # conf.config(show="")
     else:
-        code.config(show='')
+        code.config(show="*")
+        # conf.config(show="*")
 
 
 window = Tk()
@@ -18,6 +20,11 @@ window.geometry('925x500+185+85')
 window.configure(bg='#fff')
 window.resizable(False, False)
 
+
+        
+        
+show_password_var = BooleanVar()
+show_password_var.set(False)
 
 def login_user():
     if user.get() == '' or user.get() == 'Username' or code.get() == '':
@@ -122,6 +129,8 @@ def forgot_password():
     code.insert(0, 'New Password')
     code.bind('<FocusIn>', code_enter)
     code.bind('<FocusOut>', code_leave)
+    
+    
     Frame(frame, width=246, height=2, bg='black').place(x=25, y=152)
 
     conf = Entry(frame, width=30, fg='black', border=2, bg="white", font=('Microsoft Yahei UI', 10), bd=0)
@@ -134,7 +143,7 @@ def forgot_password():
     Button(frame, width=25, pady=7, text='RESET', bg='#006666', activebackground='#006666', activeforeground='white',
            fg='white', border=0, command=change_pass).place(x=60, y=250)
     
-    Checkbutton(frame, text='Hide Password', command=toggle_password_visibility,bg='white',fg='#006666').place(x=175, y=215)
+    Checkbutton(frame, text='Show Password', command=toggle_password_visibilityp,bg='white',fg='#006666').place(x=175, y=215)
     
     fwindow.mainloop()
 
@@ -155,8 +164,10 @@ heading = Label(frame, text='LogIn', fg='#006666', bg='white', font=('Microsoft 
 heading.place(x=120, y=20)
 
 
+
 def user_enter(e):
-    user.delete(0, END)
+    if user.get() == 'Username':
+        user.delete(0, END)
 
 
 def user_leave(e):
@@ -172,19 +183,24 @@ user.bind('<FocusIn>', user_enter)
 user.bind('<FocusOut>', user_leave)
 Frame(frame, width=295, height=2, bg='black').place(x=25, y=137)
 
-
 def code_enter(e):
-    code.delete(0, END)
+    if code.get() == 'Password':
+        code.delete(0, END)
+        toggle_password_visibilityp()
 
 
 def code_leave(e):
     name = code.get()
     if name == '':
         code.insert(0, 'Password')
+        if show_password_var.get():
+         code.config(show="*")
+        
+        else:
+         code.config(show="")
 
 
-code = Entry(frame, width=30, fg='black', border=2, bg="white", font=('Microsoft Yahei UI', 10), bd=0,
-             show='*')
+code = Entry(frame, width=30, fg='black', border=2, bg="white", font=('Microsoft Yahei UI', 10), bd=0)
 code.place(x=30, y=165)
 code.insert(0, 'Password')
 code.bind('<FocusIn>', code_enter)
@@ -197,7 +213,11 @@ Button(frame, width=39, pady=7, text='Log In', bg='#006666', fg='white', border=
 Button(frame, width=15, text='Forgot Password?', border=0, bg='white', cursor='hand2', fg='#006666',
        command=forgot_password).place(x=215, y=200)
 
-Checkbutton(frame, text='Show Password', command=toggle_password_visibility,bg='white',fg='#006666').place(x=215, y=225)
+# Checkbutton(frame, text='Show Password', command=toggle_password_visibilityp,bg='white',fg='#006666').place(x=215, y=225)
+show_password_checkbox = Checkbutton(frame, text="Show Password", variable=show_password_var,
+                                      command=toggle_password_visibilityp, bg='white', fg='#006666',
+                                      activeforeground='#006666')
+show_password_checkbox.place(x=215, y=225)
 
 Frame(frame, width=295, height=2, bg='black').place(x=25, y=187)
 
