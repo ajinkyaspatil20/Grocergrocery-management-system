@@ -20,7 +20,13 @@ window.geometry('925x500+185+85')
 window.configure(bg='#fff')
 window.resizable(False, False)
 
-
+def toggle_password_visibilityb():
+    if show_password_var.get():
+         code.config(show="")
+       
+    else:
+         code.config(show="*")
+       
         
         
 show_password_var = BooleanVar()
@@ -143,7 +149,7 @@ def forgot_password():
     Button(frame, width=25, pady=7, text='RESET', bg='#006666', activebackground='#006666', activeforeground='white',
            fg='white', border=0, command=change_pass).place(x=60, y=250)
     
-    Checkbutton(frame, text='Show Password', command=toggle_password_visibilityp,bg='white',fg='#006666').place(x=175, y=215)
+    # Checkbutton(frame, text='Show Password', command=toggle_password_visibilityp,bg='white',fg='#006666').place(x=175, y=215)
     
     fwindow.mainloop()
 
@@ -215,7 +221,7 @@ Button(frame, width=15, text='Forgot Password?', border=0, bg='white', cursor='h
 
 # Checkbutton(frame, text='Show Password', command=toggle_password_visibilityp,bg='white',fg='#006666').place(x=215, y=225)
 show_password_checkbox = Checkbutton(frame, text="Show Password", variable=show_password_var,
-                                      command=toggle_password_visibilityp, bg='white', fg='#006666',
+                                      command=toggle_password_visibilityb, bg='white', fg='#006666',
                                       activeforeground='#006666')
 show_password_checkbox.place(x=215, y=225)
 
