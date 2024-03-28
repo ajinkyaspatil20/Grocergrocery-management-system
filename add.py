@@ -19,7 +19,10 @@ bgOriginal = Image.open('fruits.png').resize((925,500))
         # bgLabel.place(x=0,y=0)
 img =ImageTk.PhotoImage(bgOriginal)
 Label(window,image=img,border=0,bg='white').place(x=0,y=0)
-
+def backtodashboard():
+    window.destroy()
+    import dashboard
+    
 def clearentryfields():
     name.delete(0,END)
     w_name.delete(0,END)
@@ -277,6 +280,7 @@ def fetch_data():
 fetch_data()
 
 add=Button(window,width=20,pady=7,text='ADD',bg='#013f45',activebackground='#006666',activeforeground='white',fg='white',border=1,command=add_details).place(x=200,y=460)
+back=Button(window,width=20,pady=7,text='DASHBOARD',bg='#013f45',activebackground='#006666',activeforeground='white',fg='white',border=1,command=backtodashboard).place(x=600,y=460)
 
 
 window.mainloop()

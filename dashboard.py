@@ -23,9 +23,9 @@ def expirydate_open():
     window.destroy()
     import expirydate
 
-# def pro_open():
-#     window.destroy()
-#     import profile
+def pro_open():
+    window.destroy()
+    import profileofuser
 
 bgOriginal = Image.open('newbg.png').resize((925,500))
         # bgImage = ImageTk.PhotoImage(bgOriginal)
@@ -36,7 +36,7 @@ Label(window,image=img,border=0,bg='white').place(x=0,y=0)
 
 bgOriginal1 = Image.open('profile.png').resize((275,155))
 img1 =ImageTk.PhotoImage(bgOriginal1)
-profile=Button(window,image=img1,border=10,bg='teal',activebackground='#356466').place(x=15,y=55) 
+profile=Button(window,image=img1,border=10,bg='teal',activebackground='#356466',command=pro_open).place(x=15,y=55) 
 
 
 bgOriginal2 = Image.open('add1.png').resize((275,155))

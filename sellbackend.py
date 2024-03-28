@@ -393,7 +393,9 @@ def on_click_outside(event):
         deselect()
         
 mwindow.bind("<Button-1>", on_click_outside)
-
+def backtodashboard():
+    mwindow.destroy()
+    import dashboard
 
     
 head=Label(mwindow,text="BILLING SECTION")
@@ -526,5 +528,6 @@ fetch_data()
 
 sell=Button(mwindow,width=15,pady=7,text='sell',bg='#006666',activebackground='#006666',activeforeground='white',fg='white',command=sell_detail)
 sell.place(x=1237,y=670)
+back=Button(mwindow,width=20,pady=7,text='DASHBOARD',bg='#013f45',activebackground='#006666',activeforeground='white',fg='white',border=1,command=backtodashboard).place(x=600,y=680)
 
 mwindow.mainloop()

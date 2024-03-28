@@ -54,7 +54,10 @@ def on_vertical_scroll(*args):
     outputframe.yview(*args)
 def on_horizontal_scroll(*args):
     outputframe.xview(*args)
-
+def backtodashboard():
+    mwindow.destroy()
+    import dashboard
+    
 def sell_detail():   
     con=pymysql.connect(host='localhost',user='root',password='travelmanagement')
     mycursor= con.cursor()
@@ -461,5 +464,6 @@ add.place(x=300,y=52)
 
 #sell=Button(mwindow,width=15,pady=7,text='sell',bg='#006666',activebackground='#006666',activeforeground='white',fg='white',command=sell_detail)
 #sell.place(x=1237,y=670)
+back=Button(mwindow,width=20,pady=7,text='DASHBOARD',bg='#013f45',activebackground='#006666',activeforeground='white',fg='white',border=1,command=backtodashboard).place(x=600,y=680)
 
 mwindow.mainloop()

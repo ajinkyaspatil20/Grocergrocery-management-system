@@ -18,7 +18,10 @@ bgOriginal = Image.open('newbg.png').resize((1500,800))
         # bgLabel.place(x=0,y=0)
 img =ImageTk.PhotoImage(bgOriginal)
 Label(mwindow,image=img,border=0,bg='white').place(x=0,y=0)
-
+def backtodashboard():
+    window.destroy()
+    import dashboard
+    
 def merge_billing_data():
     merged_data = {}
     for item in expiry.get_children():
@@ -462,5 +465,6 @@ add.place(x=300,y=52)
 
 #sell=Button(mwindow,width=15,pady=7,text='sell',bg='#006666',activebackground='#006666',activeforeground='white',fg='white',command=sell_detail)
 #sell.place(x=1237,y=670)
+back=Button(mwindow,width=20,pady=7,text='DASHBOARD',bg='#013f45',activebackground='#006666',activeforeground='white',fg='white',border=1,command=backtodashboard).place(x=600,y=680)
 
 mwindow.mainloop()
