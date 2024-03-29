@@ -53,6 +53,11 @@ label.place(x=50,y=350)
 
 
 #name
+def storedata():
+    # i_storename=shop.get()
+    # i_address=add.get()       make a new database
+    messagebox.showinfo("UPDATED","Profile Updated Successfully")
+    
 def user_enter(e):
     user.delete(0, END)
 
@@ -142,7 +147,7 @@ email.bind('<FocusIn>', email_enter)
 email.bind('<FocusOut>', email_leave)
 Frame(frame, width=245, height=2, bg='black').place(x=200, y=375)
 
-Button(frame, width=39, pady=7, text='Update Profile', bg='#006666', fg='white', border=0,).place(x=115,y=400)
+Button(frame, width=39, pady=7, text='Update Profile', bg='#006666', fg='white', border=0,command=storedata).place(x=115,y=400)
 back=Button(window,width=20,pady=7,text='DASHBOARD',bg='#013f45',activebackground='#006666',activeforeground='white',fg='white',border=1,command=backtodashboard).place(x=750,y=450)
 
 

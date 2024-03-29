@@ -7,7 +7,7 @@ import pymysql
 from tkcalendar import Calendar
 import tkinter as tk
 from docxtpl import DocxTemplate
-
+# from profileofuser import i_storename, i_address
 
 mwindow=Tk()
 mwindow.title=('Billing')
@@ -151,6 +151,7 @@ def generate_invoice():
     doc = DocxTemplate("miniproject.docx")
     i_name= c_namee.get()
     i_contact= c_contacte.get()
+   
     data = []
     for item in billing_table.get_children():
         values = billing_table.item(item, 'values')
@@ -161,6 +162,8 @@ def generate_invoice():
     subttotal = subtotal * (1 + salestax)
     doc.render({"name":i_name,
                 "phone":i_contact,
+                "store_name":i_storename,
+                "store-address":i_address,
                 "invoice_list":data,
                 "subtotal":subtotal,
                 "salestax":"18%",
@@ -481,8 +484,8 @@ lb6.grid(row=2,column=0)
 exd = Entry(outputframe1,width=15,fg='black',border=2,bg="white",font=('Microsoft Yahei UI',10))
 exd.grid(row=2,column=1)
 
-add=Button(outputframe1,width=10,padx=12,pady=0,text='ADD',bg='#006666',activebackground='#006666',activeforeground='white',fg='white',command=add_details)
-add.place(x=300,y=52)
+addb=Button(outputframe1,width=10,padx=12,pady=0,text='ADD',bg='#006666',activebackground='#006666',activeforeground='white',fg='white',command=add_details)
+addb.place(x=300,y=52)
 clear=Button(outputframe1,width=10,padx=12,pady=0,text='CLEAR',bg='#006666',activebackground='#006666',activeforeground='white',fg='white',command=clear_entryfield)
 clear.place(x=420,y=52)
 
