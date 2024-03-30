@@ -143,7 +143,7 @@ def delete_details():
         billing_table.delete(selected_item)
     messagebox.showinfo('Sucsess',' Item DELETED Successfully')
 
-    
+  
 def generate_invoice():
     if c_contacte.get()=='' or c_namee.get()=="":
         messagebox.showerror("Error",'Please Enter The Name and Contact of the Customer')
@@ -180,7 +180,7 @@ def clear_entryfield():
     sp.delete(0,END)
     exd.delete(0,END)
     updatequantity.delete(0,END)
-        
+       
 def add_details():
     try:
         con=pymysql.connect(host='localhost',user='root',password='travelmanagement')
