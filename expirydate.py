@@ -181,7 +181,7 @@ def fetch_data():
         for row in rows:
             # Compare the date directly with today's date
             ex_date = row[5]
-            if row[4] is not None:  # Check if discount is not None
+            if row[4] is not None and row[4] != 0:
                 product_table.insert("", END, values=row, tags=("yellow_row",))
             elif ex_date < datetime.date.today():
                 product_table.insert("", END, values=row, tags=("red_row",))
