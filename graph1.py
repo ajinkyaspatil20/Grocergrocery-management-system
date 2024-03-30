@@ -20,7 +20,9 @@ def profits_open():
 def sales_open():
     window.destroy()
     import sales
-
+def backtodashboard():
+    window.destroy()
+    import dashboard
 bgOriginal = Image.open('newbg.png').resize((925,500))
         # bgImage = ImageTk.PhotoImage(bgOriginal)
         # bgLabel=Label(fwindow,image=bgImage)
@@ -37,6 +39,7 @@ bgOriginal2 = Image.open('sales1.png').resize((325,200))
 img6 =ImageTk.PhotoImage(bgOriginal2)
 Button(window,image=img6,border=10,bg='teal',activebackground='#356466',command=sales_open).place(x=500,y=135)
 
+back=Button(window,width=20,pady=7,text='DASHBOARD',bg='#013f45',activebackground='#006666',activeforeground='white',fg='white',border=1,command=backtodashboard).place(x=600,y=460)
 
 
 window.mainloop()
