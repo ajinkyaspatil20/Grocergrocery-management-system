@@ -9,7 +9,7 @@ import tkinter as tk
 from docxtpl import DocxTemplate
 
 mwindow=Tk()
-mwindow.title=('Grocery Management System')
+mwindow.title('Expiry date')
 mwindow.geometry('1440x750+50+20')
 
 bgOriginal = Image.open('newbg.png').resize((1500,800))
