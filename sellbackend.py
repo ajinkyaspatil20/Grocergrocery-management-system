@@ -294,8 +294,12 @@ def fetch_data():
     mycursor= con.cursor()
     query='use crud'
     mycursor.execute(query)
-    query="select name,s_price,quantity,s_total,discount,ex_date from finaldbt"
+    query = "SELECT name, s_price, quantity, s_total, discount, ex_date FROM finaldbt ORDER BY name"
     mycursor.execute(query)
+
+    # query = "SELECT name, s_price, quantity, s_total, discount, ex_date FROM finaldbt ORDER BY ABS(DATEDIFF(ex_date, CURDATE()))"
+    # mycursor.execute(query)
+    
     row=mycursor.fetchall()
     if len(row)!=0:
         product_table.delete(*product_table.get_children())
@@ -367,7 +371,7 @@ def update_details():
     quantint=int(quantityq[0])
     quantinte=int(quantityv)
     if quantint < quantinte :
-        messagebox.showerror('Error','NOT ENOUGH STOCK(REENTER QUANTITY)')
+        messagebox.showerror('ERROR','NOT ENOUGH STOCK(REENTER QUANTITY)')
         return
     query="select discount from finaldbt where name=%s"
     mycursor.execute(query,name.get())

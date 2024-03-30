@@ -19,36 +19,39 @@ bgOriginal = Image.open('newbg.png').resize((1500,800))
 img =ImageTk.PhotoImage(bgOriginal)
 Label(mwindow,image=img,border=0,bg='white').place(x=0,y=0)
 
-def merge_billing_data():
-    merged_data = {}
-    for item in expiry.get_children():
-        values = expiry.item(item, 'values')
-        name_of_product = values[0]
-        quantity = int(values[2])
-        if name_of_product in merged_data:
-            merged_data[name_of_product]['quantity'] += quantity
-        else:
-            merged_data[name_of_product] = {
-                'name_of_product': name_of_product,
-                'sellingprice': values[1],
-                'quantity': quantity,
-                'discount': values[3],
-                'exdate': values[4],
-                'total': values[5]
-            }
-     # Clear existing data in billing table
-    for item in expiry.get_children():
-        expiry.delete(item)
-    # Insert merged data into billing table
-    for data in merged_data.values():
-        expiry.insert('', 'end', values=(
-            data['name_of_product'],
-            data['sellingprice'],
-            data['quantity'],
-            data['discount'],
-            data['exdate'],
-            data['total']
-        ))
+
+def applylimit():
+    con=pymysql.connect(host='localhost',user='root',password='travelmanagement')
+    mycursor= con.cursor()
+    query='use crud'
+    mycursor.execute(query)
+    limitno=int(limite.get())
+    query = "SELECT name, s_price, quantity, s_total, discount, ex_date FROM finaldbt WHERE ex_date BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL %s DAY) ORDER BY ex_date"
+    mycursor.execute(query,limitno)
+    row=mycursor.fetchall()
+    if len(row)!=0:
+        product_table.delete(*product_table.get_children())
+        for i in row:
+            product_table.insert("",END,values=i)
+        con.commit()
+    con.close() 
+def applylimit1():
+    con=pymysql.connect(host='localhost',user='root',password='travelmanagement')
+    mycursor= con.cursor()
+    query='use crud'
+    mycursor.execute(query)
+    enddate=limite1.get()
+    query ="SELECT name, s_price, quantity, s_total, discount, ex_date FROM finaldbt WHERE ex_date BETWEEN CURDATE() AND %s ORDER BY ex_date"
+
+    mycursor.execute(query,(enddate))
+    row=mycursor.fetchall()
+    if len(row)!=0:
+        product_table.delete(*product_table.get_children())
+        for i in row:
+            product_table.insert("",END,values=i)
+        con.commit()
+    con.close() 
+    
 
 def on_vertical_scroll(*args):
     outputframe.yview(*args)
@@ -58,110 +61,9 @@ def backtodashboard():
     mwindow.destroy()
     import dashboard
     
-def sell_detail():   
-    con=pymysql.connect(host='localhost',user='root',password='travelmanagement')
-    mycursor= con.cursor()
-    query='use crud'
-    mycursor.execute(query)
-    # query="DELETE FROM graph WHERE date = CURDATE() "
-    if not expiry.get_children():
-        messagebox.showerror("ERROR",'Billing Table Empty')
-        return
-    try:
-        query="INSERT INTO graph (date,profit,loss,nos) VALUES (CURDATE(),0.0,0.0,0)"
-        mycursor.execute(query)
-    except:
-        messagebox.showinfo("INFO",'HELLO THERE')
-    for row in expiry.get_children():
-        # Extract data from the treeview
-        name_of_product = expiry.item(row)['values'][0]
-        
-        query="select c_price from finaldbt where name=%s"
-        mycursor.execute(query,name_of_product)
-        cp=mycursor.fetchone()
-        cp_f=float(cp[0])
-        
-        query="select s_price from finaldbt where name=%s"
-        mycursor.execute(query,name_of_product)
-        sp=mycursor.fetchone()
-        sp_f=float(sp[0])
-        
-        
-        query="select quantity from finaldbt where name=%s"
-        mycursor.execute(query,name_of_product)
-        pquantity=mycursor.fetchone()
-        quantint1=int(pquantity[0])
-        
-        quantity = expiry.item(row)['values'][2]
-        quantint2=int(quantity)
-        finalquantity=quantint1-quantint2
-        profit_f=(sp_f-cp_f)*quantint2
-        # Execute SQL update statement
-        sql = "UPDATE finaldbt SET quantity = %s WHERE name = %s"
-        val = (finalquantity, name_of_product)
-        mycursor.execute(sql, val)
-        query="select profit from graph where date = CURDATE() "
-        mycursor.execute(query)
-        profit_t=mycursor.fetchone()
-        profit_tf=float(profit_t[0])
-        query="select nos from graph where date = CURDATE() "
-        mycursor.execute(query)
-        nos_t=mycursor.fetchone()
-        nos_tf=int(nos_t[0])
-        final_nos = nos_tf + 1
-        final_nos_f = final_nos
-        final_profit= profit_f + profit_tf
-        final_profit_f=float(final_profit)
-        sql = "UPDATE graph SET profit = %s WHERE date = CURDATE() "
-        val = (final_profit_f)
-        mycursor.execute(sql, val)
-        sql = "UPDATE graph SET nos = %s WHERE date = CURDATE() "
-        val = (final_nos_f)
-        mycursor.execute(sql, val)
-    con.commit()    
-    fetch_data()    
-    con.close()
-    messagebox.showinfo('Sucsess',' Product SOLD')
-    clear_entryfield
-    for item in expiry.get_children():
-        expiry.delete(item)
+
     
-def delete_details():
-    con=pymysql.connect(host='localhost',user='root',password='travelmanagement')
-    mycursor= con.cursor()
-    query='use crud'
-    mycursor.execute(query)
-    # Get the currently selected item
-    selected_item = expiry.focus()
-    # Delete the selected item
-    if selected_item:
-        expiry.delete(selected_item)
-    
-def generate_invoice():
-    if c_contacte.get()=='' or c_namee.get()=="":
-        messagebox.showerror("Error",'Please Enter The Name and Contact of the Customer')
-        return
-    doc = DocxTemplate("miniproject.docx")
-    i_name= c_namee.get()
-    i_contact= c_contacte.get()
-    data = []
-    for item in expiry.get_children():
-        values = expiry.item(item, 'values')
-        data.append(list(values))
-    # Assuming item[5] contains string representations of numbers
-    subtotal = sum(float(item[5]) for item in data)
-    salestax = 0.18   #18%
-    subttotal = subtotal * (1 + salestax)
-    doc.render({"name":i_name,
-                "phone":i_contact,
-                "invoice_list":data,
-                "subtotal":subtotal,
-                "salestax":"18%",
-                "total":subttotal})
-    doc_name = "new_invoice" + str(i_name) + datetime.datetime.now().strftime("%Y-%m-%d-%H%M%S") + ".docx"
-    doc.save(doc_name)
-    messagebox.showinfo("Invoice Complete", "Invoice Complete")
-    data.clear
+
         
 def clear_entryfield():
     quan.delete(0,END)
@@ -169,7 +71,7 @@ def clear_entryfield():
     stotal.delete(0,END)
     sp.delete(0,END)
     exd.delete(0,END)
-    updatequantity.delete(0,END)
+
         
 def add_details():
     try:
@@ -180,50 +82,39 @@ def add_details():
         return
     query='use crud'
     mycursor.execute(query)
+    
     if quan.get()=='':
-        messagebox.showerror("Error",'Please Enter The Quantity')
+        messagebox.showerror("Error",'Please Enter The DISCOUNT IN % ')
         return
-    namev=name.get()
-    quantityv=quan.get()
+
+    discount = float (quan.get())
+    #can be takend by database also in add
+    sp_value = float(sp.get())  
+    new_sp_value = sp_value-((discount / 100) * sp_value)
+    
     query="select quantity from finaldbt where name=%s"
     mycursor.execute(query,name.get())
-    quantityq=mycursor.fetchone()
-    quantint=int(quantityq[0])
-    quantinte=int(quantityv)
-    if quantint < quantinte :
-        messagebox.showerror('Error','NOT ENOUGH STOCK(REENTER QUANTITY)')
-        return
-    query="select discount from finaldbt where name=%s"
-    mycursor.execute(query,name.get())
-    discountv=mycursor.fetchone()
-    sellingp=sp.get()
-    query="select ex_date from finaldbt where name=%s"
-    mycursor.execute(query,name.get())
-    date=mycursor.fetchone()
-    total=float(quantityv) * float(sellingp)
+    
+    quantity = mycursor.fetchone()
+    quanttity=float(quantity[0])
+    stotal = new_sp_value * quanttity
+    
+    query="update finaldbt set s_price=%s ,s_total=%s,discount=%s where name =%s"
+    mycursor.execute(query,(new_sp_value,stotal,discount,name.get()))
     con.commit()
-    for item in expiry.get_children():
-        values = expiry.item(item, 'values')
-        if values[0] == namev:
-            # Update quantity and total
-            new_quantity = int(values[2]) + int(quantinte)
-            if quantint < new_quantity :
-                messagebox.showerror('Error','NOT ENOUGH STOCK(REENTER QUANTITY)')
-                return
-            new_total = float(values[5]) + total
-            expiry.item(item, values=(values[0], values[1], new_quantity, values[3], values[4], new_total))
-            break
-    else:
-        # Insert new row
-        expiry.insert('', 'end', values=(namev, sellingp, quantityv, discountv, date, total))
-    # Merge data to combine rows with the same product name
-    merge_billing_data()
-    # Clear entry fields
-    clear_entryfield()
-   # expiry.insert("", "end", values=(namev,sellingp,quantityv,discountv,date,total))
-    product_table.selection_remove(product_table.selection())
+    fetch_data()
+    con.close()
+    messagebox.showinfo('Sucsess',' Item UPDATED Successfully')
     clear_entryfield()
 
+def clear_entryfield():
+    quan.delete(0,END)
+    name.delete(0,END)
+    stotal.delete(0,END)
+    sp.delete(0,END)
+    exd.delete(0,END)
+
+  
 def search():
     con=pymysql.connect(host='localhost',user='root',password='travelmanagement')
     mycursor= con.cursor()
@@ -232,7 +123,7 @@ def search():
     search_term = searche.get()
     if search_term:
         # Clear the current content of the treeview
-        query="select * from finaldbt"
+        query="SELECT name, s_price, quantity, s_total, discount, ex_date FROM finaldbt ORDER BY ex_date"             #
         mycursor.execute(query)
         row=mycursor.fetchall()
         if len(row)!=0:
@@ -240,25 +131,30 @@ def search():
         # for row in product_table.get_children():
         #     product_table.delete(row)
         # Execute SQL query to fetch names matching the search term
-        mycursor.execute("SELECT * FROM finaldbt WHERE name LIKE %s", (f'%{search_term}%',))
-        row=mycursor.fetchall()
-        if len(row)!=0:
-            product_table.delete(*product_table.get_children())
-            for i in row:
-                product_table.insert("",END,values=i)
-            con.commit()
-        con.close() 
-    else:
+        mycursor.execute("SELECT name,s_price,quantity,s_total,discount,ex_date FROM finaldbt WHERE name LIKE %s ORDER BY ex_date", (f'%{search_term}%',))
+        row = mycursor.fetchall()
+
         
-        query="select * from finaldbt"
-        mycursor.execute(query)
-        row=mycursor.fetchall()
-        if len(row)!=0:
+        if len(row) != 0:
             product_table.delete(*product_table.get_children())
-            for i in row:
-                product_table.insert("",END,values=i)
-            con.commit()
-        con.close() 
+            for row in row:
+                # Compare the date directly with today's date
+                ex_date = row[5]
+                if ex_date < datetime.date.today():
+                    product_table.insert("", END, values=row, tags=("red_row",))
+                else:
+                    product_table.insert("", END, values=row)
+                con.commit()
+        else:
+            messagebox.showerror("INVALID SEARCH","NO ITEM IN INVENTORY")
+            searche.delete(0,END)
+            fetch_data()
+            
+        
+    else:
+        fetch_data()
+        
+    
 
 def fetch_data():
 
@@ -266,15 +162,38 @@ def fetch_data():
     mycursor= con.cursor()
     query='use crud'
     mycursor.execute(query)
-    query="select name,s_price,quantity,s_total,discount,ex_date from finaldbt"
+    # query = "SELECT name, s_price, quantity, s_total, discount, ex_date FROM finaldbt ORDER BY TIMESTAMPDIFF(DAY, CURDATE(), ex_date)"
+    # mycursor.execute(query)
+    # row=mycursor.fetchall()
+    # if len(row)!=0:
+    #     product_table.delete(*product_table.get_children())
+    #     for i in row:
+    #         product_table.insert("",END,values=i)
+    #     con.commit()
+    # con.close()
+    query = "SELECT name, s_price, quantity, s_total, discount, ex_date FROM finaldbt ORDER BY ex_date"
     mycursor.execute(query)
-    row=mycursor.fetchall()
-    if len(row)!=0:
+
+    rows = mycursor.fetchall()
+
+    if len(rows) != 0:
         product_table.delete(*product_table.get_children())
-        for i in row:
-            product_table.insert("",END,values=i)
+        for row in rows:
+            # Compare the date directly with today's date
+            ex_date = row[5]
+            if row[4] is not None:  # Check if discount is not None
+                product_table.insert("", END, values=row, tags=("yellow_row",))
+            elif ex_date < datetime.date.today():
+                product_table.insert("", END, values=row, tags=("red_row",))
+            else:
+                product_table.insert("", END, values=row)
         con.commit()
-    con.close() 
+
+    con.close()
+
+
+    
+    
     
     
 def get_cursor(event=''):
@@ -298,64 +217,35 @@ def get_cursor(event=''):
     stotal.insert(0,rowss[3])
     exd.insert(0,rowss[5])
 
-def get_cursor2(event=''):
 
-    con=pymysql.connect(host='localhost',user='root',password='travelmanagement')
-    mycursor= con.cursor()
-    query='use crud'
-    mycursor.execute(query)
-    cursor_row=expiry.focus()
-    content=expiry.item(cursor_row)
-    rowss=content["values"]
-    name.delete(0,END)
-    sp.delete(0,END)
-    quan.delete(0,END)
-    stotal.delete(0,END)
-    exd.delete(0,END)
-    name.insert(0,rowss[0])
-    sp.insert(0,rowss[1])
-    quan.insert(0,rowss[2])
-    stotal.insert(0,rowss[5])
-    exd.insert(0,rowss[4])  
-   
-def update_details():
-    con=pymysql.connect(host='localhost',user='root',password='travelmanagement')
-    mycursor= con.cursor()
-    query='use crud'
-    mycursor.execute(query)
-    # Get the currently selected item
-    selected_item = expiry.focus()
-    query="select discount from finaldbt where name=%s"
-    mycursor.execute(query,name.get())
-    discountv=mycursor.fetchone()
-    if updatequantity.get()=='':
-        messagebox.showerror("Error",'Please Enter The Quantity')
-        return
-    namev=name.get()
-    quantityv=updatequantity.get()
-    query="select quantity from finaldbt where name=%s"
-    mycursor.execute(query,name.get())
-    quantityq=mycursor.fetchone()
-    quantint=int(quantityq[0])
-    quantinte=int(quantityv)
-    if quantint < quantinte :
-        messagebox.showerror('Error','NOT ENOUGH STOCK(REENTER QUANTITY)')
-        return
-    query="select discount from finaldbt where name=%s"
-    mycursor.execute(query,name.get())
-    discountv=mycursor.fetchone()
-    sellingp=sp.get()
-    query="select ex_date from finaldbt where name=%s"
-    mycursor.execute(query,name.get())
-    date=mycursor.fetchone()
-    total=float(quantityv) * float(sellingp)
-    # Update the values of the selected item
-    if selected_item:
-        expiry.item(selected_item, values=(namev, sp.get(), updatequantity.get(),discountv,date,total))
-    expiry.selection_remove(expiry.selection())
+ 
+
+
+def open_cal():
+    select.config(state=tk.DISABLED)
+    def get_date():
+        selected_date = cal.get_date()
+        limite1.delete(0,END)
+        limite1.insert(0,selected_date)
+        root.destroy()
+        select.config(state=tk.NORMAL)
+    select.config(state=tk.NORMAL)    
+        
     
-    clear_entryfield() 
-      
+    # You can do whatever you want with the selected date, such as updating a label or entry field
+
+    root = tk.Tk()
+    root.title("Date Picker")
+
+    cal = Calendar(root, selectmode="day", date_pattern="yyyy-mm-dd")
+    cal.pack(padx=12, pady=12)
+
+    btn=Button(root, text="Get Date", command=get_date)
+    btn.pack(pady=5)
+    
+
+    root.mainloop()
+
 head=Label(mwindow,text="EXPIRY SECTION")
 head.place(x=600,y=0)
 head1=Label(mwindow,text="SELECT PRODUCTS TO BE SOLD")
@@ -375,11 +265,22 @@ limit=Label(mwindow,text="SET LIMIT : ")
 limit.place(x=620,y=50)
 limite = Entry(mwindow,width=48,fg='black',border=2,bg="white",font=('Microsoft Yahei UI',10))
 limite.place(x=690,y=50)
-limitb=Button(mwindow,width=10,text='APPLY',bg='#006666',activebackground='#006666',activeforeground='white',fg='white',command=search)
+limitb=Button(mwindow,width=10,text='APPLY',bg='#006666',activebackground='#006666',activeforeground='white',fg='white',command=applylimit)
 limitb.place(x=1090,y=50)
 
+limith1=Label(mwindow,text="SET LIMIT ACCORDINg TO DATE")
+limith1.place(x=690,y=80)
+limit1=Label(mwindow,text="SET LIMIT : ")
+limit1.place(x=620,y=100)
+limite1 = Entry(mwindow,width=48,fg='black',border=2,bg="white",font=('Microsoft Yahei UI',10))
+limite1.place(x=690,y=100)
+limitb1=Button(mwindow,width=10,text='APPLY',bg='#006666',activebackground='#006666',activeforeground='white',fg='white',command=applylimit1)
+limitb1.place(x=1090,y=100)
+select=Button(mwindow,width=12,text='DATE',bg='#006666',activebackground='#006666',activeforeground='white',fg='white',command=open_cal)
+select.place(x=1200,y=100)
+
 outputframe1=Frame(mwindow,bd=10,relief=GROOVE)
-outputframe1.place(x=300,y=115,width=600,height=100)
+outputframe1.place(x=300,y=150,width=600,height=100)
 #outputframe3=Frame(mwindow,bd=4,relief=RIDGE,pady=6)
 #outputframe3.place(x=800,y=620,height=80,width=400)
 
@@ -422,6 +323,8 @@ product_table.pack(fill=BOTH,expand=1)
 
 product_table.bind("<ButtonRelease-1>",get_cursor)
 fetch_data()
+product_table.tag_configure("red_row", background="red")  
+product_table.tag_configure("yellow_row", background="yellow")
 
 lb=Label(outputframe1,text='Name of product:',bd=0)
 lb.grid(row=0,column=0,padx=20)
