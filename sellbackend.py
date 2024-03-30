@@ -170,10 +170,14 @@ def delete_details():
 
   
 def generate_invoice():
+    con=pymysql.connect(host='localhost',user='root',password='travelmanagement')
+    mycursor= con.cursor()
+    query='use crud'
+    mycursor.execute(query)
     if c_contacte.get()=='' or c_namee.get()=="":
         messagebox.showerror("Error",'Please Enter The Name and Contact of the Customer')
         return
-    doc = DocxTemplate("miniproject.docx")
+    doc = DocxTemplate("miniprojectu.docx")
     i_name= c_namee.get()
     i_contact= c_contacte.get()
    
@@ -185,10 +189,33 @@ def generate_invoice():
     subtotal = sum(float(item[5]) for item in data)
     salestax = 0.18   #18%
     subttotal = subtotal * (1 + salestax)
+    query='select shopname from shopdetails'
+    mycursor.execute(query)
+    nameofshop=mycursor.fetchone()
+    nameofshop0=nameofshop[0]
+    
+    query='select address from shopdetails'
+    mycursor.execute(query)
+    nameofadd=mycursor.fetchone()
+    nameofadd0=nameofadd[0]
+    
+    query='select o_contact from shopdetails'
+    mycursor.execute(query)
+    nameofcon=mycursor.fetchone()
+    nameofcon0=nameofcon[0]
+    
+    query='select email from shopdetails'
+    mycursor.execute(query)
+    nameofem=mycursor.fetchone()
+    nameofem0=nameofem[0]
+    con.close()
+        
     doc.render({"name":i_name,
                 "phone":i_contact,
-                "store_name":i_storename,
-                "store-address":i_address,
+                "store_name":nameofshop0,
+                "store_address":nameofadd0,
+                "store_cont":nameofcon0,
+                "semail":nameofem0,
                 "invoice_list":data,
                 "subtotal":subtotal,
                 "salestax":"18%",

@@ -56,10 +56,68 @@ label.place(x=50,y=350)
 def storedata():
     # i_storename=shop.get()
     # i_address=add.get()       make a new database
-    messagebox.showinfo("UPDATED","Profile Updated Successfully")
+    
+
+    con=pymysql.connect(host='localhost',user='root',password='travelmanagement')
+    mycursor= con.cursor()
+    
+    query='use crud'
+    mycursor.execute(query)
+    
+    query='select * from shopdetails where shopname=%s'
+
+    mycursor.execute(query,(shop.get()))
+
+    row=mycursor.fetchone()
+    if row != None:
+        messagebox.showerror('Error','SHOP Already Exist')
+    else:
+    
+        query = 'INSERT INTO shopdetails (o_name, shopname, address, o_contact, email) VALUES (%s, %s, %s, %s, %s)'
+        data = (user.get(), shop.get(), add.get(), cont.get(), email.get())
+        mycursor.execute(query, data)
+        con.commit()
+        messagebox.showinfo("UPDATED","Profile Updated Successfully")
+        
+        user.delete(0,END)
+        shop.delete(0,END)
+        add.delete(0,END)
+        cont.delete(0,END)
+        email.delete(0,END)
+        
+        query='select o_name from shopdetails'
+        mycursor.execute(query)
+        nameofowner=mycursor.fetchone()
+        nameofowner0=nameofowner[0]
+        user.insert(0,nameofowner0)
+        query='select shopname from shopdetails'
+        mycursor.execute(query)
+        nameofshop=mycursor.fetchone()
+        nameofshop0=nameofshop[0]
+        shop.insert(0,nameofshop0)
+        query='select address from shopdetails'
+        mycursor.execute(query)
+        nameofadd=mycursor.fetchone()
+        nameofadd0=nameofadd[0]
+        add.insert(0,nameofadd0)
+        query='select o_contact from shopdetails'
+        mycursor.execute(query)
+        nameofcon=mycursor.fetchone()
+        nameofcon0=nameofcon[0]
+        cont.insert(0,nameofcon0)
+        query='select email from shopdetails'
+        mycursor.execute(query)
+        nameofem=mycursor.fetchone()
+        nameofem0=nameofem[0]
+        email.insert(0,nameofem0)
+        con.close()
+                
+        
     
 def user_enter(e):
-    user.delete(0, END)
+    if user.get()=='Name':
+        user.delete(0, END)
+    
 
 
 def user_leave(e):
@@ -77,7 +135,8 @@ Frame(frame, width=245, height=2, bg='black').place(x=200, y=175)
 
 #shopname
 def shop_enter(e):
-    shop.delete(0, END)
+    if shop.get()=='ShopName':
+        shop.delete(0, END)
 
 
 def shop_leave(e):
@@ -95,7 +154,8 @@ Frame(frame, width=245, height=2, bg='black').place(x=200, y=225)
 
 #Address
 def add_enter(e):
-    add.delete(0, END)
+    if add.get()=='Adress':
+        add.delete(0, END)
 
 
 def add_leave(e):
@@ -113,25 +173,27 @@ Frame(frame, width=245, height=2, bg='black').place(x=200, y=275)
 
 #Contact
 def con_enter(e):
-    con.delete(0, END)
+    if cont.get()=='Contact':
+        cont.delete(0, END)
 
 
 def con_leave(e):
-    name = con.get()
+    name = cont.get()
     if name == '':
-        con.insert(0, 'Contact')
+        cont.insert(0, 'Contact')
 
 
-con = Entry(frame, width=30, fg='black', border=2, bg="white", font=('Microsoft Yahei UI', 10), bd=0)
-con.place(x=200, y=300)
-con.insert(0, 'Contact')
-con.bind('<FocusIn>', con_enter)
-con.bind('<FocusOut>', con_leave)
+cont = Entry(frame, width=30, fg='black', border=2, bg="white", font=('Microsoft Yahei UI', 10), bd=0)
+cont.place(x=200, y=300)
+cont.insert(0, 'Contact')
+cont.bind('<FocusIn>', con_enter)
+cont.bind('<FocusOut>', con_leave)
 Frame(frame, width=245, height=2, bg='black').place(x=200, y=325)
 
 #Email
 def email_enter(e):
-    email.delete(0, END)
+    if email.get()=='Email':
+        email.delete(0, END)
 
 
 def email_leave(e):
