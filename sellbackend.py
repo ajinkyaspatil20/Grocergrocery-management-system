@@ -105,6 +105,31 @@ def sell_detail():
         sql = "UPDATE finaldbt SET quantity = %s WHERE name = %s"
         val = (finalquantity, name_of_product)
         mycursor.execute(sql, val)
+        
+        query="select quantity from finaldbt where name = %s"             #
+        mycursor.execute(query,name_of_product)
+        q_vale=mycursor.fetchone()
+        q_value=float(q_vale[0]) 
+
+
+        query="select s_price from finaldbt where name = %s"             #
+        mycursor.execute(query,name_of_product)
+        sp_vale=mycursor.fetchone()
+        sp_value=float(sp_vale[0]) 
+          
+        stotal = sp_value * q_value
+        
+        query="select c_price from finaldbt where name = %s"             #
+        mycursor.execute(query,name_of_product)
+        cp_vale=mycursor.fetchone()
+        cp_value=float(cp_vale[0]) 
+          
+        ctotal = cp_value * q_value
+   
+   
+        query="update finaldbt set s_total=%s,c_total=%s where name =%s"
+        mycursor.execute(query,(stotal,ctotal,name_of_product))
+        
         query="select profit from graph where date = CURDATE() "
         mycursor.execute(query)
         profit_t=mycursor.fetchone()
@@ -174,6 +199,10 @@ def generate_invoice():
     data.clear
         
 def clear_entryfield():
+    name.config(state='normal')
+    sp.config(state='normal')
+    exd.config(state='normal')
+    stotal.config(state='normal')
     quan.delete(0,END)
     name.delete(0,END)
     stotal.delete(0,END)
@@ -310,7 +339,11 @@ def fetch_data():
     
     
 def get_cursor(event=''):
-
+    
+    name.config(state='normal')
+    sp.config(state='normal')
+    exd.config(state='normal')
+    stotal.config(state='normal')
     con=pymysql.connect(host='localhost',user='root',password='travelmanagement')
     mycursor= con.cursor()
     query='use crud'
@@ -329,9 +362,16 @@ def get_cursor(event=''):
     quan.delete(0,END)
     stotal.insert(0,rowss[3])
     exd.insert(0,rowss[5])
+    name.config(state='disabled')
+    sp.config(state='disabled')
+    exd.config(state='disabled')
+    stotal.config(state='disabled')
 
 def get_cursor2(event=''):
-
+    name.config(state='normal')
+    sp.config(state='normal')
+    exd.config(state='normal')
+    stotal.config(state='normal')
     con=pymysql.connect(host='localhost',user='root',password='travelmanagement')
     mycursor= con.cursor()
     query='use crud'
@@ -349,6 +389,10 @@ def get_cursor2(event=''):
     quan.insert(0,rowss[2])
     stotal.insert(0,rowss[5])
     exd.insert(0,rowss[4])  
+    name.config(state='disabled')
+    sp.config(state='disabled')
+    exd.config(state='disabled')
+    stotal.config(state='disabled')
    
 def update_details():
     con=pymysql.connect(host='localhost',user='root',password='travelmanagement')

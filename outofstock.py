@@ -41,15 +41,32 @@ def add_details():
     if quan.get()==''or exd.get()=='':
         messagebox.showerror("ERROR",'Please Enter Quantity AND Expiry date')
         return
+     
     
+    quan_value = int(quan.get())  
+    query="select s_price from finaldbt where name = %s"             #
+    mycursor.execute(query,name.get())
+    sp_vale=mycursor.fetchone()
+    sp_value=float(sp_vale[0]) 
+    quan_value = int(quan.get())  
+    stotal = sp_value * quan_value
+    
+    query="select c_price from finaldbt where name = %s"             #
+    mycursor.execute(query,name.get())
+    cp_vale=mycursor.fetchone()
+    cp_value=float(cp_vale[0]) 
+    quan_value = int(quan.get())  
+    ctotal = cp_value * quan_value
    
-    query="update finaldbt set quantity=%s,ex_date=%s where name =%s"
-    mycursor.execute(query,(quan.get(),exd.get(),name.get()))
+   
+    query="update finaldbt set quantity=%s,s_total=%s,c_total=%s,ex_date=%s where name =%s"
+    mycursor.execute(query,(quan.get(),stotal,ctotal,exd.get(),name.get()))
     
     con.commit()
+    fetch_data()
     con.close()
     messagebox.showinfo("ADDED","PRODUCT ADDED SUCCESSFULLY")
-    fetch_data()
+    
 
     clear_entryfield()
 
@@ -121,7 +138,7 @@ def fetch_data():
     
     
 def get_cursor(event=''):
-
+    name.config(state='normal')
     con=pymysql.connect(host='localhost',user='root',password='travelmanagement')
     mycursor= con.cursor()
     query='use crud'
@@ -133,6 +150,7 @@ def get_cursor(event=''):
     quan.delete(0,END)
     exd.delete(0,END)
     name.insert(0,rowss[2])
+    name.config(state='readonly')
 
 
 

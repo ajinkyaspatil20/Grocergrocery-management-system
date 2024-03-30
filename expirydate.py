@@ -197,7 +197,10 @@ def fetch_data():
     
     
 def get_cursor(event=''):
-
+    name.config(state='normal')
+    sp.config(state='normal')
+    exd.config(state='normal')
+    stotal.config(state='normal')
     con=pymysql.connect(host='localhost',user='root',password='travelmanagement')
     mycursor= con.cursor()
     query='use crud'
@@ -216,6 +219,10 @@ def get_cursor(event=''):
     quan.delete(0,END)
     stotal.insert(0,rowss[3])
     exd.insert(0,rowss[5])
+    name.config(state='disabled')
+    sp.config(state='disabled')
+    exd.config(state='disabled')
+    stotal.config(state='disabled')
 
 
  
