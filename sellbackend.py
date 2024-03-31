@@ -10,8 +10,8 @@ from docxtpl import DocxTemplate
 # from profileofuser import i_storename, i_address
 
 mwindow=Tk()
-mwindow.title('Billing Section')
-mwindow.geometry('1440x750+50+20')
+mwindow.title('BILLING SECTION')
+mwindow.geometry('925x500+185+85')
 # bgOriginal = Image.open('new1.png').resize((1440,750))
 #         # bgImage = ImageTk.PhotoImage(bgOriginal)
 #         # bgLabel=Label(fwindow,image=bgImage)
@@ -476,34 +476,34 @@ def backtodashboard():
     import dashboard
 
     
-head=Label(mwindow,text="BILLING SECTION")
-head.place(x=720,y=0)
-head1=Label(mwindow,text="SELECT PRODUCTS TO BE SOLD")
-head1.place(x=100,y=30)
+# head=Label(mwindow,text="BILLING SECTION")
+# head.place(x=720,y=0)
+# head1=Label(mwindow,text="SELECT PRODUCTS TO BE SOLD")
+# head1.place(x=100,y=30)
 outputframe=Frame(mwindow,bd=10,relief=RIDGE)
-outputframe.place(x=20,y=50,width=1400,height=200)
-head2=Label(mwindow,text="SEARCH : ")
-head2.place(x=20,y=265)
-searche = Entry(mwindow,width=48,fg='black',border=2,bg="white",font=('Microsoft Yahei UI',10))
-searche.place(x=100,y=265)
+outputframe.place(x=20,y=50,width=550,height=250)
+# head2=Label(mwindow,text="SEARCH : ")
+# head2.place(x=20,y=265)
+searche = Entry(mwindow,width=30,fg='black',border=2,bg="white",font=('Comic Sans',10))
+searche.place(x=120,y=10)
 searchb=Button(mwindow,width=10,text='SEARCH',bg='#006666',activebackground='#006666',activeforeground='white',fg='white',command=search)
-searchb.place(x=500,y=265)
+searchb.place(x=20,y=10)
 
-outputframe1=Frame(mwindow,bd=10,relief=GROOVE)
-outputframe1.place(x=700,y=265,width=600,height=100)
+outputframe1=Frame(mwindow,bd=10,relief=RIDGE)
+outputframe1.place(x=20,y=325,width=550,height=100)
 outputframe2=Frame(mwindow,bd=10,relief=RIDGE)
-outputframe2.place(x=20,y=400,width=1400,height=200)
-outputframe3=Frame(mwindow,bd=4,relief=RIDGE,pady=6)
-outputframe3.place(x=800,y=620,height=80,width=400)
+outputframe2.place(x=600,y=50,width=300,height=250)
+outputframe3=Frame(mwindow,bd=10,relief=RIDGE,pady=6)
+outputframe3.place(x=600,y=325,height=100,width=300)
 
 c_namel=Label(outputframe3,text='Name of customer:',bd=0)
 c_namel.grid(row=0,column=0,padx=20)
-c_namee = Entry(outputframe3,width=15,fg='black',border=2,bg="white",font=('Microsoft Yahei UI',10))
+c_namee = Entry(outputframe3,width=15,fg='black',border=2,bg="white",font=('Comic Sans',10))
 c_namee.grid(row=0,column=1)
 
 c_contactl=Label(outputframe3,text='Customer contact:',bd=0)
 c_contactl.grid(row=1,column=0,padx=20)
-c_contacte = Entry(outputframe3,width=15,fg='black',border=2,bg="white",font=('Microsoft Yahei UI',10))
+c_contacte = Entry(outputframe3,width=15,fg='black',border=2,bg="white",font=('Comic Sans',10))
 c_contacte.grid(row=1,column=1)
 
 product_table=ttk.Treeview(outputframe,columns=("name_of_product","sellingprice","quantity","sellingpricetotal","discount","exdate"))
@@ -511,9 +511,7 @@ vsbp = ttk.Scrollbar(outputframe, orient="vertical", command=product_table.yview
 vsbp.pack(side="right", fill="y")
 product_table.configure(yscrollcommand=vsbp.set)
 
-hsbp = ttk.Scrollbar(outputframe, orient="horizontal", command=product_table.xview)
-hsbp.pack(side="bottom", fill="x")
-product_table.configure(xscrollcommand=hsbp.set)
+
 
 product_table.heading("name_of_product",text="PRODUCT")
 product_table.heading("sellingprice",text="SELLING PRICE")
@@ -536,27 +534,27 @@ fetch_data()
 
 lb=Label(outputframe1,text='Name of product:',bd=0)
 lb.grid(row=0,column=0,padx=20)
-name = Entry(outputframe1,width=15,fg='black',border=2,bg="white",textvariable=1,font=('Microsoft Yahei UI',10))
+name = Entry(outputframe1,width=15,fg='black',border=2,bg="white",textvariable=1,font=('Comic Sans',10))
 name.grid(row=0,column=1)
 
 lb1=Label(outputframe1,text='Quantity:')
 lb1.grid(row=0,column=2)
-quan = Entry(outputframe1,width=15,fg='black',border=2,bg="white",font=('Microsoft Yahei UI',10))
+quan = Entry(outputframe1,width=15,fg='black',border=2,bg="white",font=('Comic Sans',10))
 quan.grid(row=0,column=3)
 
 lb4=Label(outputframe1,text="Total amount")
 lb4.grid(row=1,column=2,padx=20)
-stotal = Entry(outputframe1,width=15,fg='black',border=2,bg="white",font=('Microsoft Yahei UI',10))
+stotal = Entry(outputframe1,width=15,fg='black',border=2,bg="white",font=('Comic Sans',10))
 stotal.grid(row=1,column=3)
 
 lb5=Label(outputframe1,text="Selling price:")
 lb5.grid(row=1,column=0)
-sp = Entry(outputframe1,width=15,fg='black',border=2,bg="white",font=('Microsoft Yahei UI',10))
+sp = Entry(outputframe1,width=15,fg='black',border=2,bg="white",font=('Comic Sans',10))
 sp.grid(row=1,column=1)
 
 lb6=Label(outputframe1,text="Expiry date:")
 lb6.grid(row=2,column=0)
-exd = Entry(outputframe1,width=15,fg='black',border=2,bg="white",font=('Microsoft Yahei UI',10))
+exd = Entry(outputframe1,width=15,fg='black',border=2,bg="white",font=('Comic Sans',10))
 exd.grid(row=2,column=1)
 
 addb=Button(outputframe1,width=10,padx=12,pady=0,text='ADD',bg='#006666',activebackground='#006666',activeforeground='white',fg='white',command=add_details)
@@ -564,16 +562,17 @@ addb.place(x=300,y=52)
 clear=Button(outputframe1,width=10,padx=12,pady=0,text='CLEAR',bg='#006666',activebackground='#006666',activeforeground='white',fg='white',command=clear_entryfield)
 clear.place(x=420,y=52)
 
-update=Button(mwindow,width=15,pady=7,text='UPDATE',bg='#006666',activebackground='#006666',activeforeground='white',fg='white',command=update_details)
-update.place(x=50,y=610)
-updatequantity=Entry(mwindow,width=15,fg='black',border=2,bg="white",font=('Microsoft Yahei UI',10))
-updatequantity.place(x=180,y=620)
+update=Button(mwindow,width=15,padx=12,text='UPDATE',bg='#006666',activebackground='#006666',activeforeground='white',fg='white',command=update_details)
+update.place(x=50,y=450)
+updatequantity=Entry(mwindow,width=15,fg='black',border=2,bg="white",font=('Comic Sans',10))
+updatequantity.place(x=200,y=450)
 
-delete=Button(mwindow,width=15,pady=7,text='delete',bg='#006666',activebackground='#006666',activeforeground='white',fg='white',command=delete_details)
-delete.place(x=425,y=610)
+delete=Button(mwindow,width=15,padx=12,text='DELETE',bg='#006666',activebackground='#006666',activeforeground='white',fg='white',command=delete_details)
+delete.place(x=400,y=450)
 
-print=Button(mwindow,width=15,pady=7,text='print',bg='#006666',activebackground='#006666',activeforeground='white',fg='white',command=generate_invoice)
-print.place(x=1237,y=630)
+print=Button(mwindow,width=15,padx=12,text='PRINT',bg='#006666',activebackground='#006666',activeforeground='white',fg='white',command=generate_invoice)
+print.place(x=600,y=450)
+
 
 billing_table=ttk.Treeview(outputframe2,columns=("name_of_product","sellingprice","quantity","discount","exdate","total"))
 
@@ -604,8 +603,8 @@ billing_table.pack(fill=BOTH,expand=1)
 billing_table.bind("<ButtonRelease-1>",get_cursor2)
 fetch_data()
 
-sell=Button(mwindow,width=15,pady=7,text='sell',bg='#006666',activebackground='#006666',activeforeground='white',fg='white',command=sell_detail)
-sell.place(x=1237,y=670)
-back=Button(mwindow,width=20,pady=7,text='DASHBOARD',bg='#013f45',activebackground='#006666',activeforeground='white',fg='white',border=1,command=backtodashboard).place(x=600,y=680)
+sell=Button(mwindow,width=15,padx=12,text='SELL',bg='#006666',activebackground='#006666',activeforeground='white',fg='white',command=sell_detail)
+sell.place(x=750,y=450)
+back=Button(mwindow,width=20,padx=12,text='BACK TO DASHBOARD',bg='#006666',activebackground='#006666',activeforeground='white',fg='white',border=1,command=backtodashboard).place(x=700,y=10)
 
 mwindow.mainloop()
