@@ -10,8 +10,9 @@ from docxtpl import DocxTemplate
 # from profileofuser import i_storename, i_address
 
 mwindow=Tk()
-mwindow.title('Billing Section')
-mwindow.geometry('1440x750+50+20')
+mwindow.title("Billing Section")
+mwindow.geometry('925x500+185+85')
+mwindow.configure(bg='#fff')
 # bgOriginal = Image.open('new1.png').resize((1440,750))
 #         # bgImage = ImageTk.PhotoImage(bgOriginal)
 #         # bgLabel=Label(fwindow,image=bgImage)
@@ -105,31 +106,6 @@ def sell_detail():
         sql = "UPDATE finaldbt SET quantity = %s WHERE name = %s"
         val = (finalquantity, name_of_product)
         mycursor.execute(sql, val)
-        
-        query="select quantity from finaldbt where name = %s"             #
-        mycursor.execute(query,name_of_product)
-        q_vale=mycursor.fetchone()
-        q_value=float(q_vale[0]) 
-
-
-        query="select s_price from finaldbt where name = %s"             #
-        mycursor.execute(query,name_of_product)
-        sp_vale=mycursor.fetchone()
-        sp_value=float(sp_vale[0]) 
-          
-        stotal = sp_value * q_value
-        
-        query="select c_price from finaldbt where name = %s"             #
-        mycursor.execute(query,name_of_product)
-        cp_vale=mycursor.fetchone()
-        cp_value=float(cp_vale[0]) 
-          
-        ctotal = cp_value * q_value
-   
-   
-        query="update finaldbt set s_total=%s,c_total=%s where name =%s"
-        mycursor.execute(query,(stotal,ctotal,name_of_product))
-        
         query="select profit from graph where date = CURDATE() "
         mycursor.execute(query)
         profit_t=mycursor.fetchone()
@@ -151,7 +127,7 @@ def sell_detail():
     con.commit()    
     fetch_data()    
     con.close()
-    messagebox.showinfo('Sucsess',' Product SOLD')
+    messagebox.showinfo('Success',' Product SOLD')
     clear_entryfield
     for item in billing_table.get_children():
         billing_table.delete(item)
@@ -166,18 +142,14 @@ def delete_details():
     # Delete the selected item
     if selected_item:
         billing_table.delete(selected_item)
-    messagebox.showinfo('Sucsess',' Item DELETED Successfully')
+    messagebox.showinfo('Success',' Item DELETED Successfully')
 
-  
+    
 def generate_invoice():
-    con=pymysql.connect(host='localhost',user='root',password='travelmanagement')
-    mycursor= con.cursor()
-    query='use crud'
-    mycursor.execute(query)
     if c_contacte.get()=='' or c_namee.get()=="":
         messagebox.showerror("Error",'Please Enter The Name and Contact of the Customer')
         return
-    doc = DocxTemplate("miniprojectu.docx")
+    doc = DocxTemplate("miniproject.docx")
     i_name= c_namee.get()
     i_contact= c_contacte.get()
    
@@ -189,33 +161,10 @@ def generate_invoice():
     subtotal = sum(float(item[5]) for item in data)
     salestax = 0.18   #18%
     subttotal = subtotal * (1 + salestax)
-    query='select shopname from shopdetails'
-    mycursor.execute(query)
-    nameofshop=mycursor.fetchone()
-    nameofshop0=nameofshop[0]
-    
-    query='select address from shopdetails'
-    mycursor.execute(query)
-    nameofadd=mycursor.fetchone()
-    nameofadd0=nameofadd[0]
-    
-    query='select o_contact from shopdetails'
-    mycursor.execute(query)
-    nameofcon=mycursor.fetchone()
-    nameofcon0=nameofcon[0]
-    
-    query='select email from shopdetails'
-    mycursor.execute(query)
-    nameofem=mycursor.fetchone()
-    nameofem0=nameofem[0]
-    con.close()
-        
     doc.render({"name":i_name,
                 "phone":i_contact,
-                "store_name":nameofshop0,
-                "store_address":nameofadd0,
-                "store_cont":nameofcon0,
-                "semail":nameofem0,
+                "store_name":i_storename,
+                "store-address":i_address,
                 "invoice_list":data,
                 "subtotal":subtotal,
                 "salestax":"18%",
@@ -226,17 +175,13 @@ def generate_invoice():
     data.clear
         
 def clear_entryfield():
-    name.config(state='normal')
-    sp.config(state='normal')
-    exd.config(state='normal')
-    stotal.config(state='normal')
     quan.delete(0,END)
     name.delete(0,END)
     stotal.delete(0,END)
     sp.delete(0,END)
     exd.delete(0,END)
     updatequantity.delete(0,END)
-       
+        
 def add_details():
     try:
         con=pymysql.connect(host='localhost',user='root',password='travelmanagement')
@@ -334,7 +279,7 @@ def search():
         
     else:
         
-        query="select name,s_price,quantity,s_total,discount,ex_date from finaldbt"#
+        query="select name,s_price,quantity,s_total,discount,exdate from finaldbt"#
         mycursor.execute(query)
         row=mycursor.fetchall()
         if len(row)!=0:
@@ -350,12 +295,8 @@ def fetch_data():
     mycursor= con.cursor()
     query='use crud'
     mycursor.execute(query)
-    query = "SELECT name, s_price, quantity, s_total, discount, ex_date FROM finaldbt ORDER BY name"
+    query="select name,s_price,quantity,s_total,discount,ex_date from finaldbt"
     mycursor.execute(query)
-
-    # query = "SELECT name, s_price, quantity, s_total, discount, ex_date FROM finaldbt ORDER BY ABS(DATEDIFF(ex_date, CURDATE()))"
-    # mycursor.execute(query)
-    
     row=mycursor.fetchall()
     if len(row)!=0:
         product_table.delete(*product_table.get_children())
@@ -366,11 +307,7 @@ def fetch_data():
     
     
 def get_cursor(event=''):
-    
-    name.config(state='normal')
-    sp.config(state='normal')
-    exd.config(state='normal')
-    stotal.config(state='normal')
+
     con=pymysql.connect(host='localhost',user='root',password='travelmanagement')
     mycursor= con.cursor()
     query='use crud'
@@ -389,16 +326,9 @@ def get_cursor(event=''):
     quan.delete(0,END)
     stotal.insert(0,rowss[3])
     exd.insert(0,rowss[5])
-    name.config(state='disabled')
-    sp.config(state='disabled')
-    exd.config(state='disabled')
-    stotal.config(state='disabled')
 
 def get_cursor2(event=''):
-    name.config(state='normal')
-    sp.config(state='normal')
-    exd.config(state='normal')
-    stotal.config(state='normal')
+
     con=pymysql.connect(host='localhost',user='root',password='travelmanagement')
     mycursor= con.cursor()
     query='use crud'
@@ -416,10 +346,6 @@ def get_cursor2(event=''):
     quan.insert(0,rowss[2])
     stotal.insert(0,rowss[5])
     exd.insert(0,rowss[4])  
-    name.config(state='disabled')
-    sp.config(state='disabled')
-    exd.config(state='disabled')
-    stotal.config(state='disabled')
    
 def update_details():
     con=pymysql.connect(host='localhost',user='root',password='travelmanagement')
@@ -442,7 +368,7 @@ def update_details():
     quantint=int(quantityq[0])
     quantinte=int(quantityv)
     if quantint < quantinte :
-        messagebox.showerror('ERROR','NOT ENOUGH STOCK(REENTER QUANTITY)')
+        messagebox.showerror('Error','NOT ENOUGH STOCK(REENTER QUANTITY)')
         return
     query="select discount from finaldbt where name=%s"
     mycursor.execute(query,name.get())
@@ -456,7 +382,7 @@ def update_details():
     if selected_item:
         billing_table.item(selected_item, values=(namev, sp.get(), updatequantity.get(),discountv,date,total))
     billing_table.selection_remove(billing_table.selection())
-    messagebox.showinfo('Sucsess',' Item UPDATED Successfully')
+    messagebox.showinfo('Success',' Item UPDATED Successfully')
     clear_entryfield() 
     
 def deselect(event=None):                   ##addkr
@@ -475,35 +401,31 @@ def backtodashboard():
     mwindow.destroy()
     import dashboard
 
-    
-head=Label(mwindow,text="BILLING SECTION")
-head.place(x=720,y=0)
-head1=Label(mwindow,text="SELECT PRODUCTS TO BE SOLD")
-head1.place(x=100,y=30)
-outputframe=Frame(mwindow,bd=10,relief=RIDGE)
-outputframe.place(x=20,y=50,width=1400,height=200)
-head2=Label(mwindow,text="SEARCH : ")
-head2.place(x=20,y=265)
-searche = Entry(mwindow,width=48,fg='black',border=2,bg="white",font=('Microsoft Yahei UI',10))
-searche.place(x=100,y=265)
+searche = Entry(mwindow,width=30,fg='black',border=2,bg="white",font=('Comic Sans',10))
+searche.place(x=120,y=10)
 searchb=Button(mwindow,width=10,text='SEARCH',bg='#006666',activebackground='#006666',activeforeground='white',fg='white',command=search)
-searchb.place(x=500,y=265)
+searchb.place(x=20,y=10)
 
-outputframe1=Frame(mwindow,bd=10,relief=GROOVE)
-outputframe1.place(x=700,y=265,width=600,height=100)
+outputframe=Frame(mwindow,bd=10,relief=RIDGE)
+outputframe.place(x=20,y=50,width=550,height=250)
+
+outputframe1=Frame(mwindow,bd=10,relief=RIDGE)
+outputframe1.place(x=20,y=325,width=550,height=100)
+
 outputframe2=Frame(mwindow,bd=10,relief=RIDGE)
-outputframe2.place(x=20,y=400,width=1400,height=200)
+outputframe2.place(x=600,y=50,width=300,height=250)
+
 outputframe3=Frame(mwindow,bd=4,relief=RIDGE,pady=6)
-outputframe3.place(x=800,y=620,height=80,width=400)
+outputframe3.place(x=600,y=325,height=100,width=300)
 
 c_namel=Label(outputframe3,text='Name of customer:',bd=0)
 c_namel.grid(row=0,column=0,padx=20)
-c_namee = Entry(outputframe3,width=15,fg='black',border=2,bg="white",font=('Microsoft Yahei UI',10))
+c_namee = Entry(outputframe3,width=15,fg='black',border=2,bg="white",font=('Comic Sans',10))
 c_namee.grid(row=0,column=1)
 
 c_contactl=Label(outputframe3,text='Customer contact:',bd=0)
 c_contactl.grid(row=1,column=0,padx=20)
-c_contacte = Entry(outputframe3,width=15,fg='black',border=2,bg="white",font=('Microsoft Yahei UI',10))
+c_contacte = Entry(outputframe3,width=15,fg='black',border=2,bg="white",font=('Comic Sans',10))
 c_contacte.grid(row=1,column=1)
 
 product_table=ttk.Treeview(outputframe,columns=("name_of_product","sellingprice","quantity","sellingpricetotal","discount","exdate"))
@@ -520,15 +442,16 @@ product_table.heading("sellingprice",text="SELLING PRICE")
 product_table.heading("quantity",text="QUANTITY") 
 product_table.heading("sellingpricetotal",text="SELLING PRICE TOTAL") 
 product_table.heading("discount",text="DISCOUNT") 
-product_table.heading("exdate",text="EXPIRY DATE") 
+product_table.heading("exdate",text="EXPIRY")
 
 product_table["show"]="headings"
 product_table.column("name_of_product",width=100)
 product_table.column("sellingprice",width=75)
 product_table.column("quantity",width=50)
-product_table.column("sellingpricetotal",width=75)
+product_table.column("sellingpricetotal",width=50)
 product_table.column("discount",width=50)
 product_table.column("exdate",width=75)
+
 product_table.pack(fill=BOTH,expand=1)
 
 product_table.bind("<ButtonRelease-1>",get_cursor)
@@ -536,27 +459,27 @@ fetch_data()
 
 lb=Label(outputframe1,text='Name of product:',bd=0)
 lb.grid(row=0,column=0,padx=20)
-name = Entry(outputframe1,width=15,fg='black',border=2,bg="white",textvariable=1,font=('Microsoft Yahei UI',10))
+name = Entry(outputframe1,width=15,fg='black',border=2,bg="white",textvariable=1,font=('Comic Sans',10))
 name.grid(row=0,column=1)
 
 lb1=Label(outputframe1,text='Quantity:')
 lb1.grid(row=0,column=2)
-quan = Entry(outputframe1,width=15,fg='black',border=2,bg="white",font=('Microsoft Yahei UI',10))
+quan = Entry(outputframe1,width=15,fg='black',border=2,bg="white",font=('Comic Sans',10))
 quan.grid(row=0,column=3)
 
 lb4=Label(outputframe1,text="Total amount")
 lb4.grid(row=1,column=2,padx=20)
-stotal = Entry(outputframe1,width=15,fg='black',border=2,bg="white",font=('Microsoft Yahei UI',10))
+stotal = Entry(outputframe1,width=15,fg='black',border=2,bg="white",font=('Comic Sans',10))
 stotal.grid(row=1,column=3)
 
 lb5=Label(outputframe1,text="Selling price:")
 lb5.grid(row=1,column=0)
-sp = Entry(outputframe1,width=15,fg='black',border=2,bg="white",font=('Microsoft Yahei UI',10))
+sp = Entry(outputframe1,width=15,fg='black',border=2,bg="white",font=('Comic Sans',10))
 sp.grid(row=1,column=1)
 
 lb6=Label(outputframe1,text="Expiry date:")
 lb6.grid(row=2,column=0)
-exd = Entry(outputframe1,width=15,fg='black',border=2,bg="white",font=('Microsoft Yahei UI',10))
+exd = Entry(outputframe1,width=15,fg='black',border=2,bg="white",font=('Comic Sans',10))
 exd.grid(row=2,column=1)
 
 addb=Button(outputframe1,width=10,padx=12,pady=0,text='ADD',bg='#006666',activebackground='#006666',activeforeground='white',fg='white',command=add_details)
@@ -564,16 +487,16 @@ addb.place(x=300,y=52)
 clear=Button(outputframe1,width=10,padx=12,pady=0,text='CLEAR',bg='#006666',activebackground='#006666',activeforeground='white',fg='white',command=clear_entryfield)
 clear.place(x=420,y=52)
 
-update=Button(mwindow,width=15,pady=7,text='UPDATE',bg='#006666',activebackground='#006666',activeforeground='white',fg='white',command=update_details)
-update.place(x=50,y=610)
-updatequantity=Entry(mwindow,width=15,fg='black',border=2,bg="white",font=('Microsoft Yahei UI',10))
-updatequantity.place(x=180,y=620)
+update=Button(mwindow,width=15,padx=12,text='UPDATE',bg='#006666',activebackground='#006666',activeforeground='white',fg='white',command=update_details)
+update.place(x=50,y=450)
+updatequantity=Entry(mwindow,width=15,fg='black',border=2,bg="white",font=('Comic Sans',10))
+updatequantity.place(x=200,y=450)
 
-delete=Button(mwindow,width=15,pady=7,text='delete',bg='#006666',activebackground='#006666',activeforeground='white',fg='white',command=delete_details)
-delete.place(x=425,y=610)
+delete=Button(mwindow,width=15,padx=12,text='DELETE',bg='#006666',activebackground='#006666',activeforeground='white',fg='white',command=delete_details)
+delete.place(x=400,y=450)
 
-print=Button(mwindow,width=15,pady=7,text='print',bg='#006666',activebackground='#006666',activeforeground='white',fg='white',command=generate_invoice)
-print.place(x=1237,y=630)
+print=Button(mwindow,width=15,padx=12,text='PRINT',bg='#006666',activebackground='#006666',activeforeground='white',fg='white',command=generate_invoice)
+print.place(x=600,y=450)
 
 billing_table=ttk.Treeview(outputframe2,columns=("name_of_product","sellingprice","quantity","discount","exdate","total"))
 
@@ -604,8 +527,8 @@ billing_table.pack(fill=BOTH,expand=1)
 billing_table.bind("<ButtonRelease-1>",get_cursor2)
 fetch_data()
 
-sell=Button(mwindow,width=15,pady=7,text='sell',bg='#006666',activebackground='#006666',activeforeground='white',fg='white',command=sell_detail)
-sell.place(x=1237,y=670)
-back=Button(mwindow,width=20,pady=7,text='DASHBOARD',bg='#013f45',activebackground='#006666',activeforeground='white',fg='white',border=1,command=backtodashboard).place(x=600,y=680)
+sell=Button(mwindow,width=15,padx=12,text='SELL',bg='#006666',activebackground='#006666',activeforeground='white',fg='white',command=sell_detail)
+sell.place(x=750,y=450)
+back=Button(mwindow,width=20,padx=12,text='BACK TO DASHBOARD',bg='#006666',activebackground='#006666',activeforeground='white',fg='white',border=1,command=backtodashboard).place(x=700,y=10)
 
 mwindow.mainloop()
