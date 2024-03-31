@@ -8,7 +8,7 @@ import tkinter as tk
 
 
 window=Tk()
-window.title("Statistics")
+window.title("STATISTICS")
 window.geometry('925x500+185+85')
 window.configure(bg='#fff')
 window.resizable(False,False)

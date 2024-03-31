@@ -48,7 +48,7 @@ def toggle_password_visibilityb():
          conf.config(show="*")
 
 Vwindow = Tk()
-Vwindow.title("SignUp")
+Vwindow.title("SIGN UP")
 Vwindow.geometry('925x500+185+85')
 Vwindow.configure(bg='#fff')
 Vwindow.resizable(False, False)

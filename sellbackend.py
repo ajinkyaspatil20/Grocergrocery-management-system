@@ -12,13 +12,14 @@ from docxtpl import DocxTemplate
 mwindow=Tk()
 mwindow.title('BILLING SECTION')
 mwindow.geometry('925x500+185+85')
+mwindow.resizable(False, False)
 # bgOriginal = Image.open('new1.png').resize((1440,750))
 #         # bgImage = ImageTk.PhotoImage(bgOriginal)
 #         # bgLabel=Label(fwindow,image=bgImage)
 #         # bgLabel.place(x=0,y=0)
 # img =ImageTk.PhotoImage(bgOriginal)
 
-bgOriginal = Image.open('newbg.png').resize((1500,750))
+bgOriginal = Image.open('newbg.png').resize((925,500))
 img =ImageTk.PhotoImage(bgOriginal)
 Label(mwindow,image=img,border=0,bg='white').place(x=0,y=0)
 

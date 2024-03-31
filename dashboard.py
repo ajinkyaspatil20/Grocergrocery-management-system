@@ -5,7 +5,7 @@ import pymysql
 from PIL import Image
 
 window=Tk()
-window.title("Dashboard")
+window.title("DASHBOARD")
 window.geometry('925x500+185+85')
 window.configure(bg='#fff')
 window.resizable(False,False)

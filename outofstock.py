@@ -9,10 +9,10 @@ import tkinter as tk
 from docxtpl import DocxTemplate
 
 mwindow=Tk()
-mwindow.title=('Grocery Management System')
-mwindow.geometry('1440x750+50+20')
+mwindow.title('OUT OF STOCK')
+mwindow.geometry('925x500+185+85')
 
-bgOriginal = Image.open('newbg.png').resize((1500,800))
+bgOriginal = Image.open('newbg.png').resize((925,500))
         # bgImage = ImageTk.PhotoImage(bgOriginal)
         # bgLabel=Label(fwindow,image=bgImage)
         # bgLabel.place(x=0,y=0)
@@ -179,42 +179,40 @@ def open_cal():
 
     root.mainloop()
       
-head=Label(mwindow,text="OUTOF STOCK")
-head.place(x=720,y=0)
+
 
 """head1=Label(mwindow,text="Search Product")
 head1.place(x=100,y=30)"""
 outputframe=Frame(mwindow,bd=10,relief=RIDGE)
-outputframe.place(x=20,y=100,width=800,height=500)
-head2=Label(mwindow,text="SEARCH : ")
-head2.place(x=20,y=50)
-searche = Entry(mwindow,width=48,fg='black',border=2,bg="white",font=('Microsoft Yahei UI',10))
-searche.place(x=80,y=50)
+outputframe.place(x=87,y=50,width=750,height=320)
+
+searche = Entry(mwindow,width=30,fg='black',border=2,bg="white",font=('Comic Sans',10))
+searche.place(x=120,y=10)
 searchb=Button(mwindow,width=10,text='SEARCH',bg='#006666',activebackground='#006666',activeforeground='white',fg='white',command=search)
-searchb.place(x=480,y=50)
+searchb.place(x=20,y=10)
 
 #limith=Label(mwindow,text="SET LIMIT ACCORDINGLY")
 #limith.place(x=690,y=30)
 #limit=Label(mwindow,text="SET LIMIT : ")
 #limit.place(x=620,y=50)
-#limite = Entry(mwindow,width=48,fg='black',border=2,bg="white",font=('Microsoft Yahei UI',10))
+#limite = Entry(mwindow,width=48,fg='black',border=2,bg="white",font=('Comic Sans',10))
 #limite.place(x=690,y=50)
 #limitb=Button(mwindow,width=10,text='APPLY',bg='#006666',activebackground='#006666',activeforeground='white',fg='white',command=search)
 #limitb.place(x=1090,y=50)
 
-outputframe1=Frame(mwindow,bd=10,relief=GROOVE)
-outputframe1.place(x=900,y=100,width=500,height=110)
+outputframe1=Frame(mwindow,bd=10,relief=RIDGE)
+outputframe1.place(x=87,y=385,width=750,height=100)
 #outputframe3=Frame(mwindow,bd=4,relief=RIDGE,pady=6)
 #outputframe3.place(x=800,y=620,height=80,width=400)
 
 #c_namel=Label(outputframe3,text='Name of customer:',bd=0)
 #c_namel.grid(row=0,column=0,padx=20)
-#c_namee = Entry(outputframe3,width=15,fg='black',border=2,bg="white",font=('Microsoft Yahei UI',10))
+#c_namee = Entry(outputframe3,width=15,fg='black',border=2,bg="white",font=('Comic Sans',10))
 #c_namee.grid(row=0,column=1)
 
 #c_contactl=Label(outputframe3,text='Customer contact:',bd=0)
 #c_contactl.grid(row=1,column=0,padx=20)
-#c_contacte = Entry(outputframe3,width=15,fg='black',border=2,bg="white",font=('Microsoft Yahei UI',10))
+#c_contacte = Entry(outputframe3,width=15,fg='black',border=2,bg="white",font=('Comic Sans',10))
 #c_contacte.grid(row=1,column=1)
 
 
@@ -225,9 +223,6 @@ vsbp = ttk.Scrollbar(outputframe, orient="vertical", command=product_table.yview
 vsbp.pack(side="right", fill="y")
 product_table.configure(yscrollcommand=vsbp.set)
 
-hsbp = ttk.Scrollbar(outputframe, orient="horizontal", command=product_table.xview)
-hsbp.pack(side="bottom", fill="x")
-product_table.configure(xscrollcommand=hsbp.set)
 
 product_table.heading("whslname",text="WHOLESALER")
 product_table.heading("contact",text="CONTACT")
@@ -250,27 +245,27 @@ fetch_data()
 
 lb=Label(outputframe1,text='Name of product:',bd=0)
 lb.grid(row=0,column=0,padx=20)
-name = Entry(outputframe1,width=15,fg='black',border=2,bg="white",textvariable=1,font=('Microsoft Yahei UI',10))
+name = Entry(outputframe1,width=15,fg='black',border=2,bg="white",textvariable=1,font=('Comic Sans',10))
 name.grid(row=0,column=1)
 
 lb1=Label(outputframe1,text='Quantity')
 lb1.grid(row=1,column=0)
-quan = Entry(outputframe1,width=15,fg='black',border=2,bg="white",font=('Microsoft Yahei UI',10))
+quan = Entry(outputframe1,width=15,fg='black',border=2,bg="white",font=('Comic Sans',10))
 quan.grid(row=1,column=1)
 
 #lb4=Label(outputframe1,text="Total amount")
 #lb4.grid(row=1,column=2,padx=20)
-#stotal = Entry(outputframe1,width=15,fg='black',border=2,bg="white",font=('Microsoft Yahei UI',10))
+#stotal = Entry(outputframe1,width=15,fg='black',border=2,bg="white",font=('Comic Sans',10))
 #stotal.grid(row=1,column=3)
 
 #lb5=Label(outputframe1,text="Selling price:")
 #lb5.grid(row=1,column=0)
-#sp = Entry(outputframe1,width=15,fg='black',border=2,bg="white",font=('Microsoft Yahei UI',10))
+#sp = Entry(outputframe1,width=15,fg='black',border=2,bg="white",font=('Comic Sans',10))
 #sp.grid(row=1,column=1)
 
 lb6=Label(outputframe1,text="Expiry date:")
 lb6.grid(row=2,column=0)
-exd = Entry(outputframe1,width=15,fg='black',border=2,bg="white",font=('Microsoft Yahei UI',10))
+exd = Entry(outputframe1,width=15,fg='black',border=2,bg="white",font=('Comic Sans',10))
 exd.grid(row=2,column=1)
 
 add=Button(mwindow,width=20,padx=12,pady=0,text='ADD',bg='#006666',activebackground='#006666',activeforeground='white',fg='white',command=add_details)
@@ -278,7 +273,7 @@ add.place(x=1070,y=230)
 
 #update=Button(mwindow,width=15,pady=7,text='UPDATE',bg='#006666',activebackground='#006666',activeforeground='white',fg='white',command=update_details)
 #update.place(x=50,y=610)
-#updatequantity=Entry(mwindow,width=15,fg='black',border=2,bg="white",font=('Microsoft Yahei UI',10))
+#updatequantity=Entry(mwindow,width=15,fg='black',border=2,bg="white",font=('Comic Sans',10))
 #updatequantity.place(x=180,y=620)
 #
 #delete=Button(mwindow,width=15,pady=7,text='delete',bg='#006666',activebackground='#006666',activeforeground='white',fg='white',command=delete_details)
@@ -289,7 +284,7 @@ add.place(x=1070,y=230)
 
 #sell=Button(mwindow,width=15,pady=7,text='sell',bg='#006666',activebackground='#006666',activeforeground='white',fg='white',command=sell_detail)
 #sell.place(x=1237,y=670)
-back=Button(mwindow,width=20,pady=7,text='DASHBOARD',bg='#013f45',activebackground='#006666',activeforeground='white',fg='white',border=1,command=backtodashboard).place(x=600,y=680)
+back=Button(mwindow,width=20,padx=12,text='BACK TO DASHBOARD',bg='#006666',activebackground='#006666',activeforeground='white',fg='white',border=1,command=backtodashboard).place(x=700,y=10)
 select=Button(outputframe1,width=12,text='DATE',bg='#006666',activebackground='#006666',activeforeground='white',fg='white',command=open_cal)
-select.place(x=300,y=50)
+select.grid(row=2,column=2)
 mwindow.mainloop()

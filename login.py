@@ -15,7 +15,7 @@ def toggle_password_visibilityp():
 
 
 window = Tk()
-window.title("LogIn")
+window.title("LOG IN")
 window.geometry('925x500+185+85')
 window.configure(bg='#fff')
 window.resizable(False, False)

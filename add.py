@@ -8,7 +8,7 @@ import tkinter as tk
 
 
 window=Tk()
-window.title("Add")
+window.title("ADD")
 window.geometry('925x500+185+85')
 window.configure(bg='#fff')
 window.resizable(False,False)
@@ -56,7 +56,7 @@ def update_details():
     con.commit()
     fetch_data()
     con.close()
-    messagebox.showinfo('Sucsess',' Item UPDATED Successfully')
+    messagebox.showinfo('SUCCESS',' Item UPDATED Successfully')
     clearentryfields()
     window.focus()
 
@@ -121,7 +121,7 @@ def add_details():
         con.commit()
         fetch_data()
         con.close()
-        messagebox.showinfo('Sucsess',' Item Added Successfully')
+        messagebox.showinfo('SUCCESS',' Item Added Successfully')
         clearentryfields()
         window.focus()
 
@@ -145,7 +145,7 @@ def delete_details():
     fetch_data()
     
     con.close()
-    messagebox.showinfo('Sucsess',' Item DELETED Successfully')
+    messagebox.showinfo('SUCCESS',' Item DELETED Successfully')
     clearentryfields()
     window.focus()
 def open_cal():
@@ -224,54 +224,54 @@ def search():
         con.close() 
 
 
-searche = Entry(window,width=48,fg='black',border=2,bg="white",font=('Microsoft Yahei UI',10))
-searche.place(x=100,y=3)
+searche = Entry(window,width=30,fg='black',border=2,bg="white",font=('Comic Sans',10))
+searche.place(x=115,y=3)
 searchb=Button(window,width=10,text='SEARCH',bg='#006666',activebackground='#006666',activeforeground='white',fg='white',command=search)
-searchb.place(x=500,y=3)
+searchb.place(x=27,y=3)
 
-frame=Frame(window,width=750,height=185,bg="#5bdcde")
+frame=Frame(window,width=750,height=185,bg="white",bd=5,relief=RIDGE)
 frame.place(x=100,y=270)
 
-lb=Label(window,text='PRODUCT NAME',bg="white",font=('Microsoft Yahei UI',10),fg="#013f45")
-lb.place(x=310,y=275)
+lb=Label(window,text='Product name',bg="white",font=('Comic Sans',10),fg="#013f45")
+lb.place(x=310,y=283)
 name = Entry(window,width=20,fg='black',border=2,bg="white",textvariable=1,font=('Microsoft Yahei UI',12))
-name.place(x=425,y=275)
+name.place(x=425,y=283)
 
 
 
-lb1=Label(window,text='Quantity',bg="white",font=('Microsoft Yahei UI',10),fg="#013f45")
+lb1=Label(window,text='Quantity',bg="white",font=('Comic Sans',10),fg="#013f45")
 lb1.place(x=500,y=320)
 quan = Entry(window,width=20,fg='black',border=2,bg="white",font=('Microsoft Yahei UI',12))
 quan.place(x=625,y=320)
 
 
-lb2=Label(window,text='Cost price',bg="white",font=('Microsoft Yahei UI',10),fg="#013f45")
+lb2=Label(window,text='Cost price',bg="white",font=('Comic Sans',10),fg="#013f45")
 lb2.place(x=125,y=320)
 cp = Entry(window,width=20,fg='black',border=2,bg="white",font=('Microsoft Yahei UI',12))
 cp.place(x=270,y=320)
 
-lb3=Label(window,text="Wholeseller's name",bg="white",font=('Microsoft Yahei UI',10),fg="#013f45")
+lb3=Label(window,text="Wholeseller's name",bg="white",font=('Comic Sans',10),fg="#013f45")
 lb3.place(x=500,y=370)
 w_name = Entry(window,width=20,fg='black',border=2,bg="white",font=('Microsoft Yahei UI',12))
 w_name.place(x=625,y=370)
 
-lb4=Label(window,text="Wholeseller's contact",bg="white",font=('Microsoft Yahei UI',10),fg="#013f45")
+lb4=Label(window,text="Wholeseller's contact",bg="white",font=('Comic Sans',10),fg="#013f45")
 lb4.place(x=125,y=370)
 w_contact = Entry(window,width=20,fg='black',border=2,bg="white",font=('Microsoft Yahei UI',12))
 w_contact.place(x=270,y=370)
 
-lb5=Label(window,text="Selling price",bg="white",font=('Microsoft Yahei UI',10),fg="#013f45")
-lb5.place(x=500,y=420)
+lb5=Label(window,text="Selling price",bg="white",font=('Comic Sans',10),fg="#013f45")
+lb5.place(x=500,y=418)
 sp = Entry(window,width=20,fg='black',border=2,bg="white",font=('Microsoft Yahei UI',11))
-sp.place(x=625,y=420)
+sp.place(x=625,y=418)
 
-lb6=Label(window,text="Expiry date",bg="white",font=('Microsoft Yahei UI',10),fg="#013f45")
-lb6.place(x=125,y=420)
+lb6=Label(window,text="Expiry date",bg="white",font=('Comic Sans',10),fg="#013f45")
+lb6.place(x=125,y=418)
 exd = Entry(window,width=10,fg='black',border=2,bg="white",font=('Microsoft Yahei UI',11))
-exd.place(x=270,y=420)
+exd.place(x=270,y=418)
 
 select=Button(window,width=12,text='DATE',bg='#006666',activebackground='#006666',activeforeground='white',fg='white',command=open_cal)
-select.place(x=370,y=420)
+select.place(x=370,y=418)
 
 frame=Frame(window,width=850,height=225,bg="white")
 frame.place(x=27,y=37)

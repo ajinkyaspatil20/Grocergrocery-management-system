@@ -5,7 +5,7 @@ import pymysql
 
 
 window = Tk()
-window.title("Profile")
+window.title("PROFILE")
 window.geometry("925x500+300+150")
 window.configure(bg='#00FFFF')
 window.resizable(False,False)
@@ -20,7 +20,7 @@ def backtodashboard():
     
 frame=Frame(window,width=500,height=460,bg='white')
 frame.place(x=212,y=20)
-heading=Label(frame,text='Profile',fg='black', bg="white" ,font=('Microsoft Yahei UI',23,'bold'))
+heading=Label(frame,text='PROFILE',fg='black', bg="white" ,font=('Microsoft Yahei UI',23,'bold'))
 heading.place(x=200,y=20)
 
 label=Label(frame,text="Name",fg='#006666',bg='white',font=('Microsoft Yahei UI',15))
@@ -154,7 +154,7 @@ Frame(frame, width=245, height=2, bg='black').place(x=200, y=225)
 
 #Address
 def add_enter(e):
-    if add.get()=='Adress':
+    if add.get()=='Address':
         add.delete(0, END)
 
 

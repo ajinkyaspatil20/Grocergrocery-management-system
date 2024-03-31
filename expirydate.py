@@ -9,10 +9,11 @@ import tkinter as tk
 from docxtpl import DocxTemplate
 
 mwindow=Tk()
-mwindow.title('Expiry date')
-mwindow.geometry('1440x750+50+20')
+mwindow.title('EXPIRY DATE')
+mwindow.geometry('925x500+185+85')
+mwindow.resizable(False,False)
 
-bgOriginal = Image.open('newbg.png').resize((1500,800))
+bgOriginal = Image.open('newbg.png').resize((925,500))
         # bgImage = ImageTk.PhotoImage(bgOriginal)
         # bgLabel=Label(fwindow,image=bgImage)
         # bgLabel.place(x=0,y=0)
@@ -21,6 +22,10 @@ Label(mwindow,image=img,border=0,bg='white').place(x=0,y=0)
 
 
 def applylimit():
+    
+    if limite.get()=="":
+        messagebox.showerror("ERROR","PLEASE ENTER LIMIT")
+        return
     con=pymysql.connect(host='localhost',user='root',password='travelmanagement')
     mycursor= con.cursor()
     query='use crud'
@@ -36,6 +41,9 @@ def applylimit():
         con.commit()
     con.close() 
 def applylimit1():
+    if limite1.get()=="":
+        messagebox.showerror("ERROR","PLEASE ENTER LIMIT")
+        return
     con=pymysql.connect(host='localhost',user='root',password='travelmanagement')
     mycursor= con.cursor()
     query='use crud'
@@ -253,41 +261,38 @@ def open_cal():
 
     root.mainloop()
 
-head=Label(mwindow,text="EXPIRY SECTION")
-head.place(x=600,y=0)
-head1=Label(mwindow,text="SELECT PRODUCTS TO BE SOLD")
-head1.place(x=100,y=30)
+# head=Label(mwindow,text="EXPIRY SECTION")
+# head.place(x=600,y=0)
+# head1=Label(mwindow,text="SELECT PRODUCTS TO BE SOLD")
+# head1.place(x=100,y=30)
 outputframe=Frame(mwindow,bd=10,relief=RIDGE)
-outputframe.place(x=20,y=250,width=1400,height=400)
-head2=Label(mwindow,text="SEARCH : ")
-head2.place(x=20,y=50)
-searche = Entry(mwindow,width=48,fg='black',border=2,bg="white",font=('Microsoft Yahei UI',10))
-searche.place(x=80,y=50)
+outputframe.place(x=20,y=50,width=650,height=310)
+# head2=Label(mwindow,text="SEARCH : ")
+# head2.place(x=20,y=50)
+searche = Entry(mwindow,width=30,fg='black',border=2,bg="white",font=('Microsoft Yahei UI',10))
+searche.place(x=120,y=10)
 searchb=Button(mwindow,width=10,text='SEARCH',bg='#006666',activebackground='#006666',activeforeground='white',fg='white',command=search)
-searchb.place(x=480,y=50)
+searchb.place(x=20,y=10)
 
-limith=Label(mwindow,text="SET LIMIT ACCORDINGLY")
-limith.place(x=690,y=30)
-limit=Label(mwindow,text="SET LIMIT : ")
-limit.place(x=620,y=50)
-limite = Entry(mwindow,width=48,fg='black',border=2,bg="white",font=('Microsoft Yahei UI',10))
-limite.place(x=690,y=50)
+limith=Label(mwindow,text="SET LIMIT ACCORDING TO DAYS")
+limith.place(x=690,y=130)
+
+limite = Entry(mwindow,width=15,fg='black',border=2,bg="white",font=('Microsoft Yahei UI',10))
+limite.place(x=690,y=155)
 limitb=Button(mwindow,width=10,text='APPLY',bg='#006666',activebackground='#006666',activeforeground='white',fg='white',command=applylimit)
-limitb.place(x=1090,y=50)
+limitb.place(x=830,y=155)
 
-limith1=Label(mwindow,text="SET LIMIT ACCORDINg TO DATE")
-limith1.place(x=690,y=80)
-limit1=Label(mwindow,text="SET LIMIT : ")
-limit1.place(x=620,y=100)
-limite1 = Entry(mwindow,width=48,fg='black',border=2,bg="white",font=('Microsoft Yahei UI',10))
-limite1.place(x=690,y=100)
+limith1=Label(mwindow,text="SET LIMIT ACCORDING TO DATE")
+limith1.place(x=690,y=200)
+limite1 = Entry(mwindow,width=15,fg='black',border=2,bg="white",font=('Microsoft Yahei UI',10))
+limite1.place(x=690,y=225)
 limitb1=Button(mwindow,width=10,text='APPLY',bg='#006666',activebackground='#006666',activeforeground='white',fg='white',command=applylimit1)
-limitb1.place(x=1090,y=100)
-select=Button(mwindow,width=12,text='DATE',bg='#006666',activebackground='#006666',activeforeground='white',fg='white',command=open_cal)
-select.place(x=1200,y=100)
+limitb1.place(x=830,y=255)
+select=Button(mwindow,width=10,text='DATE',bg='#006666',activebackground='#006666',activeforeground='white',fg='white',command=open_cal)
+select.place(x=830,y=225)
 
 outputframe1=Frame(mwindow,bd=10,relief=GROOVE)
-outputframe1.place(x=300,y=150,width=600,height=100)
+outputframe1.place(x=20,y=385,width=650,height=100)
 #outputframe3=Frame(mwindow,bd=4,relief=RIDGE,pady=6)
 #outputframe3.place(x=800,y=620,height=80,width=400)
 
@@ -301,16 +306,11 @@ outputframe1.place(x=300,y=150,width=600,height=100)
 #c_contacte = Entry(outputframe3,width=15,fg='black',border=2,bg="white",font=('Microsoft Yahei UI',10))
 #c_contacte.grid(row=1,column=1)
 
-scroll_x=ttk.Scrollbar(outputframe,orient=HORIZONTAL, command=on_vertical_scroll)
-scroll_y=ttk.Scrollbar(outputframe,orient=VERTICAL ,command=on_horizontal_scroll)
 
-
-product_table=ttk.Treeview(outputframe,columns=("name_of_product","sellingprice","quantity","sellingpricetotal","discount","exdate"),xscrollcommand=scroll_x.set,yscrollcommand=scroll_y.set)
-
-scroll_x.pack(side=BOTTOM,fill=X)
-scroll_y.pack(side=RIGHT,fill=Y)
-scroll_x=ttk.Scrollbar(command=product_table.xview)
-scroll_y=ttk.Scrollbar(command=product_table.yview)
+product_table=ttk.Treeview(outputframe,columns=("name_of_product","sellingprice","quantity","sellingpricetotal","discount","exdate"))
+vsbp = ttk.Scrollbar(outputframe, orient="vertical", command=product_table.yview)
+vsbp.pack(side="right", fill="y")
+product_table.configure(yscrollcommand=vsbp.set)
 
 product_table.heading("name_of_product",text="PRODUCT")
 product_table.heading("sellingprice",text="SELLING PRICE")
@@ -374,6 +374,6 @@ add.place(x=300,y=52)
 
 #sell=Button(mwindow,width=15,pady=7,text='sell',bg='#006666',activebackground='#006666',activeforeground='white',fg='white',command=sell_detail)
 #sell.place(x=1237,y=670)
-back=Button(mwindow,width=20,pady=7,text='DASHBOARD',bg='#013f45',activebackground='#006666',activeforeground='white',fg='white',border=1,command=backtodashboard).place(x=600,y=680)
+back=Button(mwindow,width=20,padx=12,text='BACK TO DASHBOARD',bg='#006666',activebackground='#006666',activeforeground='white',fg='white',border=1,command=backtodashboard).place(x=700,y=10)
 
 mwindow.mainloop()
