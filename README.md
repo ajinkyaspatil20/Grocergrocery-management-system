@@ -1,1 +1,1 @@
-# Mini-Project
+# this is Python + Sql based Grocery or inventory management system along with having unique feature of expiry date product and there values 
