@@ -1,3 +1,4 @@
+https://github.com/DeepSourceCorp/good-first-issue/issues
 # 🛒 Grocery Management System with AI (Python + SQL)
 
 ## 📌 Project Overview
