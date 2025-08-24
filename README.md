@@ -2,7 +2,7 @@
 
 ## 📌 Project Overview
 
-The **Grocery Management System with AI** is a smart inventory and sales tracking application built using **Python** and **SQL**, with integrated AI features to optimize stock levels, predict demand, and assist users in decision-making. The system helps streamline grocery operations for small to mid-sized vendors...
+The **Grocery Management System with AI** is a smart inventory and sales tracking application built using **Python** and **SQL**, with integrated AI features to optimize stock levels, predict demand, and assist users in decision-making. The system helps streamline grocery operations for small to mid-sized vendors
 
 ---
 
